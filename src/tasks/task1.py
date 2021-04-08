@@ -3,9 +3,8 @@ from easygopigo3 import EasyGoPiGo3
 
 gpg = EasyGoPiGo3()  # Create object instance of the robot
 
-
 # Drawing a square:
-length = 30   # Side length
+length = 30  # Side length
 
 for i in range(4):
     gpg.drive_cm(length)  # Drive forward for length cm
@@ -38,3 +37,6 @@ for i in range(3):
 
 # 2. Rectangular triangle
 # 3. Another one maybe???
+
+# Drawing a n-sided polygon given the number of sides:
+n = 3
