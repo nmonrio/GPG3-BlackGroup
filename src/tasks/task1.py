@@ -49,7 +49,3 @@ length = 30
 for v in range(n):
         gpg.drive_cm(length)
         gpg.turn_degrees(180-(((n-2)*180)/n))   #(n-2*180)/n is the interior angle between two sides, 180 - ans to get the turn in degrees of the robot
-
-   
-        
-    
