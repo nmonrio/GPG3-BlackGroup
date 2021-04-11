@@ -33,10 +33,19 @@ time.sleep(5)
 # 1. equilateral triangle of side length 'length'
 for i in range(3):
     gpg.drive_cm(length)
-    gpg.turn_degrees(60)
+    gpg.turn_degrees(120)
 
 # 2. Rectangular triangle
+length_hypotenuse = a
+length_one_side = b
+legnth_other_side = math.sqrt((a**2)-(b**2)))
+# (mañana acabo esta parte)
 # 3. Another one maybe???
 
 # Drawing a n-sided polygon given the number of sides:
-n = 3
+n = 3 #number of sides of the polygon
+length = 30
+
+for v in range(n):
+        gpg.drive_cm(length)
+        gpg.turn_degrees(180-(((n-2)*180)/n))   #(n-2*180)/n is the interior angle between two sides, 180 - ans to get the turn in degrees of the robot
