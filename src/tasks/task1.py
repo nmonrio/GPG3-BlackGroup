@@ -1,4 +1,5 @@
 import time
+import math
 from easygopigo3 import EasyGoPiGo3
 
 gpg = EasyGoPiGo3()  # Create object instance of the robot
@@ -36,11 +37,16 @@ for i in range(3):
     gpg.turn_degrees(120)
 
 # 2. Rectangular triangle
-length_hypotenuse = a
-length_one_side = b
-legnth_other_side = math.sqrt((a**2)-(b**2)))
-# (mañana acabo esta parte)
-# 3. Another one maybe???
+length_hypotenuse = 60
+length_one_side = 30
+if a > b:
+    legnth_other_side = math.sqrt((length_hypotenuse**2)-(length_one_side**2)))
+    gpg.drive_cm(length_one_side)
+    gpg.turn_degrees(90)
+    gpg.drive_cm(legnth_other_side)
+    gpg.turn_degrees(180-math.atan(length_one_side/legnth_other_side)
+    gpg.drive(length_hypotenuse)
+
 
 # Drawing a n-sided polygon given the number of sides:
 n = 3 #number of sides of the polygon
