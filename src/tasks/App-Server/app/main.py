@@ -7,12 +7,23 @@ Created on Fri Apr  9 18:55:16 2021
 """
 
 import socket
+import time
 
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.gridlayout import GridLayout
-#from kivy.uix.label import Label
+
+from kivy.uix.popup import Popup
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.widget import Widget
+from kivy.properties import ObjectProperty
+from kivy.uix.label import Label
+
+class popupConnectionError(FloatLayout):
+	pass
+class popupConnectionSuccess(FloatLayout):
+	pass
 
 class MyGrid(GridLayout):
 
@@ -87,8 +98,10 @@ class MyGrid(GridLayout):
             self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.s.connect((HOST, PORT))
             print("Connected")
+            show_popup("Success",popupConnectionSuccess())
         except:
             print("Could not connect")
+            show_popup("Error",popupConnectionError())
         
     def forwardLeft(self,instance):
         try:
@@ -209,6 +222,12 @@ class MyGrid(GridLayout):
             print('Received: Executing', datarefined)
         except:
             print("Not Connected")
+
+def show_popup(popupmessage,popupcontent):
+	popupWindow = Popup(title = popupmessage, content = popupcontent, size_hint = (None, None), size = (400,150))
+	popupWindow.open()
+
+
 
 class RaspberryApp(App):
     def build(self):
