@@ -209,8 +209,8 @@ class SliderWindow(Screen):
 	prev_right = "#"
 
 	def send_values(self,left,right):
-		print("l",self.left_slider.value,"r",self.right_slider.value)
-		MyRaspberryApp.send_commands.sendMessage("l"+str(self.left_slider.value)+"r"+str(self.right_slider.value))
+		print("l",int(self.left_slider.value),"r",int(self.right_slider.value))
+		MyRaspberryApp.send_commands.sendMessage("l"+str(int(self.left_slider.value))+"r"+str(int(self.right_slider.value)))
 
 	pass
 

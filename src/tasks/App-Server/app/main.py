@@ -14,10 +14,30 @@ from kivy.clock import Clock
 
 from functools import partial
 
+#from kivy.garden.joystick import Joystick
+
 class MainWindow(Screen):
 	pass
 
 class ButtonWindow(Screen):
+	pass
+
+class JoystickWindow(Screen):
+	'''
+	self.joystick_instance.bind(pad=self._update_pad_display)
+
+	def _update_pad_display(self, instance, pad):
+		x, y = pad
+		x, y = (str(x)[0:5], str(y)[0:5])
+		x, y = (('x: ' + x), ('\ny: ' + y))
+		r = "radians: " + str(instance.radians)[0:5]
+		m = "\nmagnitude: " + str(instance.magnitude)[0:5]
+		a = "\nangle: " + str(instance.angle)[0:5]
+		#self.root.ids.pad_display_xy.text = "".join([x, y])
+		print("".join([x, y]))
+		#self.root.ids.pad_display_rma.text = "".join([r, m, a])
+		print("".join([r, m, a]))
+	'''
 	pass
 
 class SendCommands():
@@ -44,163 +64,6 @@ class SendCommands():
 			print('Received: Executing', datarefined)
 		except:
 			print("Not Connected")
-
-'''
-class SendCommand():
-	def startClient(self, *args):
-		#try:
-		HOST = '127.0.0.1'  # The server's hostname or IP address
-		PORT = 65433  # The port used by the server
-		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.s.connect((HOST, PORT))
-		print("Connected")
-		successPopup()
-		#except:
-		#	print("Could not connect")
-		#	errorPopup()
-	#Buttons:
-	def forwardLeft(self):
-		try:
-			print("Sent: Forward Left")
-			self.s.sendall(bytes("q", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def goForward(self):
-		try: 
-			print("Sent: Forward")
-			self.s.sendall(bytes("w", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def forwardRight(self):
-		try:
-			print("Sent: Forward Right")
-			self.s.sendall(bytes("e", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def left(self):
-		try:
-			print("Sent: Left")
-			self.s.sendall(bytes("a", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def stopHere(self):
-		try:
-			print("Sent: Stop")
-			self.s.sendall(bytes(" ", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def right(self):
-		try:
-			print("Sent: Right")
-			self.s.sendall(bytes("d", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def backwardLeft(self):
-		try:
-			print("Sent: Backward Left")
-			self.s.sendall(bytes("z", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def goBackward(self):
-		try:
-			print("Sent: Backward")
-			self.s.sendall(bytes("s", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def backwardRight(self):
-		try:
-			print("Sent: Backward Right")
-			self.s.sendall(bytes("x", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def program_1(self):
-		try:
-			print("Sent: Program 1")
-			self.s.sendall(bytes("1", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def program_2(self):
-		try:
-			print("Sent: Program 2")
-			self.s.sendall(bytes("2", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def program_3(self):
-		try:
-			print("Sent: Program 3")
-			self.s.sendall(bytes("3", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	#Sliders:
-	def leftSlider(self,value):
-		try:
-			print("Sent: Left Slider",value)
-			self.s.sendall(bytes("l"+str(value), 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Left Motor Set to:', datarefined)
-		except:
-			print("Not Connected")
-	
-	def rightSlider(self,value):
-		try:
-			print("Sent: Right Slider",value)
-			self.s.sendall(bytes("l"+str(value), 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Right Motor Set to:', datarefined)
-		except:
-			print("Not Connected")
-	pass
-'''
 
 class SliderWindow(Screen):
 	

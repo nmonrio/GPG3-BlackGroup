@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Raspberry Control Center</string>
-    <string name="private_version">1618400113.3084245</string>
+    <string name="private_version">1618410717.3169675</string>
     <string name="presplash_color">#000000</string>
     <string name="urlScheme">kivy</string>
 </resources>

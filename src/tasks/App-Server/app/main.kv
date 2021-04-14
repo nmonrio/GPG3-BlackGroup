@@ -2,6 +2,8 @@ WindowManager:
 	MainWindow:
 	SliderWindow:
 	ButtonWindow:
+	JoystickWindow:
+
 
 
 <MainWindow>:
@@ -43,6 +45,36 @@ WindowManager:
 				app.root.current = "sliders"
 				root.manager.transition.direction = "left"
 
+		Button:
+			id: go_to_joystick
+			text: "Joystick"
+			on_release:
+				app.root.current = "joystick"
+				root.manager.transition.direction = "left"
+
+#: import Joystick kivy.garden.joystick.Joystick
+
+<JoystickWindow>:
+	name: "joystick"
+
+	GridLayout:
+		cols:1
+		GridLayout:
+			cols: 2
+			Label:
+				id: x_position
+				text: "joystick_instance.pad[0]"
+			Label:
+				id: y_position
+				text: "joystick_instance.pad[1]"
+		Joystick:
+			id: joystick_instance
+		Label:
+		Button:
+			text: "Home"
+			on_press:
+				app.root.current = "main"
+				root.manager.transition.direction = "right"
 
 <SliderWindow>:
 	name: "sliders"
@@ -62,8 +94,8 @@ WindowManager:
 				cols: 1
 				Slider:
 					id: left_slider
-					min: -255
-					max: 255
+					min: -100
+					max: 100
 					value: 0
 					step: 1
 					orientation: 'vertical'
@@ -86,8 +118,8 @@ WindowManager:
 				cols: 1
 				Slider:
 					id: right_slider
-					min: -255
-					max: 255
+					min: -100
+					max: 100
 					value: 0
 					step: 1
 					orientation: 'vertical'
@@ -99,17 +131,17 @@ WindowManager:
 			Button:
 				text: "Stop"
 				on_press:
-					self.parent.parent.parent.send_values(0,0)
 					left_slider.value = 0
 					right_slider.value = 0
+					self.parent.parent.parent.send_values(0,0)
 			Button:
 				text: "Home"
 				on_press:
+					left_slider.value = 0
+					right_slider.value = 0
 					self.parent.parent.parent.send_values(0,0)
 					app.root.current = "main"
 					root.manager.transition.direction = "right"
-					left_slider.value = 0
-					right_slider.value = 0
 					root.active = False
 
 
