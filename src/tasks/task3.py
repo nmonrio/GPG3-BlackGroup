@@ -1,6 +1,5 @@
 import time
 import easygopigo3 as easy
-import gopigo
 
 gpg = easy.EasyGoPiGo3()
 
