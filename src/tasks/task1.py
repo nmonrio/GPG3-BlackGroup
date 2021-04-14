@@ -1,6 +1,8 @@
 import time
 import math
 from easygopigo3 import EasyGoPiGo3
+import easygopigo3 as easy
+gpg = easy.EasyGoPiGo3()
 
 gpg = EasyGoPiGo3()  # Create object instance of the robot
 
@@ -37,10 +39,10 @@ for i in range(3):
     gpg.turn_degrees(120)
 
 # 2. Rectangular triangle
-length_hypotenuse = 60
-length_one_side = 30
+length_one_side = 60
+length_other_side = 30
 if a > b:
-    legnth_other_side = math.sqrt((length_hypotenuse**2)-(length_one_side**2)))
+    legnth_hypotenuse = math.sqrt((length_one_side**2)+(length_other_side**2)))
     gpg.drive_cm(length_one_side)
     gpg.turn_degrees(90)
     gpg.drive_cm(legnth_other_side)
@@ -49,9 +51,16 @@ if a > b:
 
 
 # Drawing a n-sided polygon given the number of sides:
-n = 3 #number of sides of the polygon
-length = 30
+n = int(input("Introduce the number of sides of the polygon"))
+length = int(input("Introduce the length of the sides in cm"))
+security_distance = gpg.init_distance_sensor()
+ 
+while security_distance.read_cm()>30:
+    for v in range(n):
+            gpg.drive_cm(length)
+            gpg.turn_degrees(360/n)) 
+    
+while security_distance.read_cm() <=30:
+    gpg.turn_degrees(90)
+        
 
-for v in range(n):
-        gpg.drive_cm(length)
-        gpg.turn_degrees(180-(((n-2)*180)/n))   #(n-2*180)/n is the interior angle between two sides, 180 - ans to get the turn in degrees of the robot
