@@ -37,30 +37,29 @@ time.sleep(5)
 for i in range(3):
     gpg.drive_cm(length)
     gpg.turn_degrees(120)
+    
+time.sleep(5)
 
 # 2. Rectangular triangle
 length_one_side = 60
 length_other_side = 30
-if a > b:
-    legnth_hypotenuse = math.sqrt((length_one_side**2)+(length_other_side**2)))
+legnth_hypotenuse = math.sqrt((length_one_side**2)+(length_other_side**2)))
     gpg.drive_cm(length_one_side)
     gpg.turn_degrees(90)
     gpg.drive_cm(legnth_other_side)
     gpg.turn_degrees(180-math.atan(length_one_side/legnth_other_side)
     gpg.drive(length_hypotenuse)
 
-
+time.sleep(5)
+                     
 # Drawing a n-sided polygon given the number of sides:
 n = int(input("Introduce the number of sides of the polygon"))
 length = int(input("Introduce the length of the sides in cm"))
-security_distance = gpg.init_distance_sensor()
- 
-while security_distance.read_cm()>30:
-    for v in range(n):
-            gpg.drive_cm(length)
-            gpg.turn_degrees(360/n)) 
+  
+for v in range(n):
+    gpg.drive_cm(length)
+    gpg.turn_degrees(360/n) 
     
-while security_distance.read_cm() <=30:
-    gpg.turn_degrees(90)
+
         
 
