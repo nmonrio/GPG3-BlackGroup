@@ -1,237 +1,256 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Apr  9 18:55:16 2021
-
-@author: bernat
-"""
-
+ 
 import socket
-import time
 
 from kivy.app import App
-from kivy.uix.button import Button
-from kivy.uix.textinput import TextInput
-from kivy.uix.gridlayout import GridLayout
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.lang import Builder
 
 from kivy.uix.popup import Popup
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.uix.label import Label
+from kivy.clock import Clock
+
+from functools import partial
+
+class MainWindow(Screen):
+	pass
+
+class ButtonWindow(Screen):
+	pass
+
+class SendCommands():
+	def startClient(self, host_name, port_name):
+		try:
+			HOST = '127.0.0.1'  # The server's hostname or IP address (this is the default)
+			HOST = host_name
+			PORT = 65433  # The port used by the server (this is the default)
+			PORT = int(port_name)
+			self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			self.s.connect((HOST, PORT))
+			print("Connected")
+			successPopup()
+		except:
+			print("Could not connect")
+			errorPopup()
+
+	def sendMessage(self,command):
+		try:
+			print("Sent:",command)
+			self.s.sendall(bytes(str(command), 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+'''
+class SendCommand():
+	def startClient(self, *args):
+		#try:
+		HOST = '127.0.0.1'  # The server's hostname or IP address
+		PORT = 65433  # The port used by the server
+		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.s.connect((HOST, PORT))
+		print("Connected")
+		successPopup()
+		#except:
+		#	print("Could not connect")
+		#	errorPopup()
+	#Buttons:
+	def forwardLeft(self):
+		try:
+			print("Sent: Forward Left")
+			self.s.sendall(bytes("q", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def goForward(self):
+		try: 
+			print("Sent: Forward")
+			self.s.sendall(bytes("w", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def forwardRight(self):
+		try:
+			print("Sent: Forward Right")
+			self.s.sendall(bytes("e", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def left(self):
+		try:
+			print("Sent: Left")
+			self.s.sendall(bytes("a", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def stopHere(self):
+		try:
+			print("Sent: Stop")
+			self.s.sendall(bytes(" ", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def right(self):
+		try:
+			print("Sent: Right")
+			self.s.sendall(bytes("d", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def backwardLeft(self):
+		try:
+			print("Sent: Backward Left")
+			self.s.sendall(bytes("z", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def goBackward(self):
+		try:
+			print("Sent: Backward")
+			self.s.sendall(bytes("s", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def backwardRight(self):
+		try:
+			print("Sent: Backward Right")
+			self.s.sendall(bytes("x", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def program_1(self):
+		try:
+			print("Sent: Program 1")
+			self.s.sendall(bytes("1", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def program_2(self):
+		try:
+			print("Sent: Program 2")
+			self.s.sendall(bytes("2", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	def program_3(self):
+		try:
+			print("Sent: Program 3")
+			self.s.sendall(bytes("3", 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Received: Executing', datarefined)
+		except:
+			print("Not Connected")
+
+	#Sliders:
+	def leftSlider(self,value):
+		try:
+			print("Sent: Left Slider",value)
+			self.s.sendall(bytes("l"+str(value), 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Left Motor Set to:', datarefined)
+		except:
+			print("Not Connected")
+	
+	def rightSlider(self,value):
+		try:
+			print("Sent: Right Slider",value)
+			self.s.sendall(bytes("l"+str(value), 'utf-8'))
+			data = repr(self.s.recv(1024))
+			datarefined = data[2:len(data)-1:]
+			print('Right Motor Set to:', datarefined)
+		except:
+			print("Not Connected")
+	pass
+'''
+
+class SliderWindow(Screen):
+	
+	active = False
+	prev_left = "#"
+	prev_right = "#"
+
+	def send_values(self,left,right):
+		print("l",self.left_slider.value,"r",self.right_slider.value)
+		MyRaspberryApp.send_commands.sendMessage("l"+str(self.left_slider.value)+"r"+str(self.right_slider.value))
+
+	pass
+
+class WindowManager(ScreenManager):
+	pass
 
 class popupConnectionError(FloatLayout):
 	pass
 class popupConnectionSuccess(FloatLayout):
 	pass
 
-class MyGrid(GridLayout):
+class errorPopup(Popup):
+    def __init__(self, **kwargs):
+        self.popup = Popup(title = "Error", content = popupConnectionError(), size_hint = (None, None), size = (400,150))
+        self.popup.open()
+        Clock.schedule_once(self.dismiss_popup, 4)
 
-    def __init__(self,**kwargs):
-        super(MyGrid,self).__init__(**kwargs)
-        self.cols=3
-        
-        self.ip = TextInput(multiline=False,text="127.0.0.1")
-        self.add_widget(self.ip)
-        
-        self.port = TextInput(multiline=False,text="65433")
-        self.add_widget(self.port)
-        
-        self.connect = Button(text="Connect",font_size=40)
-        self.connect.bind(on_press=self.startClient)
-        self.add_widget(self.connect) 
-                
-        self.forLeft = Button(text="Left Forward",font_size=40)
-        self.forLeft.bind(on_press=self.forwardLeft)
-        self.add_widget(self.forLeft)   
+    def dismiss_popup(self, dt):
+        self.popup.dismiss()
 
-        self.forward = Button(text="Forward",font_size=40)
-        self.forward.bind(on_press=self.goForward)
-        self.add_widget(self.forward)   
+class successPopup(Popup):
+    def __init__(self, **kwargs):
+        self.popup = Popup(title = "Success", content = popupConnectionSuccess(), size_hint = (None, None), size = (400,150))
+        self.popup.open()
+        Clock.schedule_once(self.dismiss_popup, 2)
 
-        self.forRight = Button(text="Right Forward",font_size=40)
-        self.forRight.bind(on_press=self.forwardRight)
-        self.add_widget(self.forRight) 
-        
-        self.turnLeft = Button(text="Left",font_size=40)
-        self.turnLeft.bind(on_press=self.left)
-        self.add_widget(self.turnLeft) 
-     
-        self.stop = Button(text="Stop",font_size=40)
-        self.stop.bind(on_press=self.stopHere)
-        self.add_widget(self.stop)
-        
-        self.turnRight = Button(text="Right",font_size=40)
-        self.turnRight.bind(on_press=self.right)
-        self.add_widget(self.turnRight) 
- 
-        self.backLeft = Button(text="Left Back",font_size=40)
-        self.backLeft.bind(on_press=self.backwardLeft)
-        self.add_widget(self.backLeft) 
-        
-        self.backward = Button(text="Backward",font_size=40)
-        self.backward.bind(on_press=self.goBackward)
-        self.add_widget(self.backward) 
-        
-        self.backRight = Button(text="Right Back",font_size=40)
-        self.backRight.bind(on_press=self.backwardRight)
-        self.add_widget(self.backRight) 
-        
-        self.program1 = Button(text="Program 1",font_size=40)
-        self.program1.bind(on_press=self.program_1)
-        self.add_widget(self.program1)
-        
-        self.program2 = Button(text="Program 2",font_size=40)
-        self.program2.bind(on_press=self.program_2)
-        self.add_widget(self.program2)
-        
-        self.program3 = Button(text="Program 3",font_size=40)
-        self.program3.bind(on_press=self.program_3)
-        self.add_widget(self.program3)
-        
-    def startClient(self, *args):
-        try:
-            HOST = '127.0.0.1'  # The server's hostname or IP address
-            HOST = self.ip.text
-            PORT = 65433  # The port used by the server
-            PORT = int(self.port.text)
-            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.s.connect((HOST, PORT))
-            print("Connected")
-            show_popup("Success",popupConnectionSuccess())
-        except:
-            print("Could not connect")
-            show_popup("Error",popupConnectionError())
-        
-    def forwardLeft(self,instance):
-        try:
-            print("Sent: Forward Left")
-            self.s.sendall(bytes("q", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-
-    def goForward(self,instance):
-        try: 
-            print("Sent: Forward")
-            self.s.sendall(bytes("w", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-        
-    def forwardRight(self,instance):
-        try:
-            print("Sent: Forward Right")
-            self.s.sendall(bytes("e", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-
-    def left(self,instance):
-        try:
-            print("Sent: Left")
-            self.s.sendall(bytes("a", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-
-    def stopHere(self,instance):
-        try:
-            print("Sent: Stop")
-            self.s.sendall(bytes(" ", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-
-    def right(self,instance):
-        try:
-            print("Sent: Right")
-            self.s.sendall(bytes("d", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-
-    def backwardLeft(self,instance):
-        try:
-            print("Sent: Backward Left")
-            self.s.sendall(bytes("z", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-
-    def goBackward(self,instance):
-        try:
-            print("Sent: Backward")
-            self.s.sendall(bytes("s", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-        
-    def backwardRight(self,instance):
-        try:
-            print("Sent: Backward Right")
-            self.s.sendall(bytes("x", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-    
-    def program_1(self,instance):
-        try:
-            print("Sent: Program 1")
-            self.s.sendall(bytes("1", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-
-    def program_2(self,instance):
-        try:
-            print("Sent: Program 2")
-            self.s.sendall(bytes("2", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-
-    def program_3(self,instance):
-        try:
-            print("Sent: Program 3")
-            self.s.sendall(bytes("3", 'utf-8'))
-            data = repr(self.s.recv(1024))
-            datarefined = data[2:len(data)-1:]
-            print('Received: Executing', datarefined)
-        except:
-            print("Not Connected")
-
-def show_popup(popupmessage,popupcontent):
-	popupWindow = Popup(title = popupmessage, content = popupcontent, size_hint = (None, None), size = (400,150))
-	popupWindow.open()
+    def dismiss_popup(self, dt):
+        self.popup.dismiss()
 
 
 
-class RaspberryApp(App):
-    def build(self):
-        return MyGrid()
+kv = Builder.load_file("main.kv")
+
+class MyRaspberryApp(App):
+	send_commands = SendCommands()
+	slider_window = SliderWindow()
+	main_window = MainWindow()
+
+	def build(self):
+		return kv
 
 if __name__=="__main__":
-    RaspberryApp().run()
+	MyRaspberryApp().run()

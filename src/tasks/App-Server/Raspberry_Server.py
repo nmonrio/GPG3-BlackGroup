@@ -13,7 +13,7 @@ import socket
 #import gopigo3 # import the GoPiGo3 drivers
 HOST = '127.0.0.1'
 #HOST = '10.10.10.10'  # Standard loopback interface address (localhost)
-PORT = 65433        # Port to listen on (non-privileged ports are > 1023)
+PORT = 65436        # Port to listen on (non-privileged ports are > 1023)
 #GPG = gopigo3.GoPiGo3() 
 
 def forward():
@@ -103,5 +103,27 @@ if __name__=="__main__":
                     elif datarefined == "3":
                         conn.sendall(bytes("Program 3", 'utf-8'))
                         program3()
+                    elif datarefined[0] == "l":
+                        try:
+                            motors = []
+                            motor = ""
+
+                            for i in str(datarefined):
+                                if i == "l":
+                                    pass
+                                elif i == "r":
+                                    motors.append(int(motor))
+                                    motor = ""
+                                else:
+                                    motor = motor+i
+                                    print(motor)
+
+                            motors.append(int(motor))
+                            
+                            print("Setting Left Motor to "+str(motors[0])+" and Right Motor to "+str(motors[1]))
+                            m = "Setting Left Motor to "+str(motors[0])+" and Right Motor to "+str(motors[1])
+                            conn.sendall(bytes(m, 'utf-8'))
+                        except:
+                            print("Error")
                     else:
                         conn.sendall(bytes("Unknown", 'utf-8'))
