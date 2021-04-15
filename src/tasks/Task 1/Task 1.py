@@ -1,8 +1,6 @@
 import time
 import math
 from easygopigo3 import EasyGoPiGo3
-import easygopigo3 as easy
-gpg = easy.EasyGoPiGo3()
 
 gpg = EasyGoPiGo3()  # Create object instance of the robot
 
