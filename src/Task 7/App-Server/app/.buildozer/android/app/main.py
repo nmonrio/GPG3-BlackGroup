@@ -12,12 +12,56 @@ from kivy.properties import ObjectProperty
 from kivy.uix.label import Label
 from kivy.clock import Clock
 
-from functools import partial
+#from functools import partial
+
+#from kivy.garden.joystick import Joystick
 
 class MainWindow(Screen):
 	pass
 
 class ButtonWindow(Screen):
+	pass
+
+class JoystickWindow(Screen):
+	
+	active = False
+	prev_x = "#"
+	prev_y = "#"
+
+	def send_values(self):
+		x = self.joystick_instance.pad_x*100
+		y = self.joystick_instance.pad_y*100
+		left_motor = "#"
+		right_motor = "#"
+
+		#first quadrant
+		if x >= 0 and y >= 0:
+			left_motor = int(round((x**2+y**2)**(1/2),0))
+			right_motor = int(round(y*(x**2+y**2)**(1/2)/100,0))
+
+		#second quadrant
+		elif x < 0 and y >= 0:
+			left_motor = int(round(y*(x**2+y**2)**(1/2)/100,0))
+			right_motor = int(round((x**2+y**2)**(1/2),0))
+
+		#third quadrant
+		elif x < 0 and y < 0:
+			left_motor = -int(round(y*(x**2+y**2)**(1/2)/100,0))
+			right_motor = -int(round((x**2+y**2)**(1/2),0))
+
+		#fourth quadrant
+		elif x >= 0 and y < 0:
+			left_motor = -int(round((x**2+y**2)**(1/2),0))
+			right_motor = -int(round(y*(x**2+y**2)**(1/2)/100,0))
+
+		self.right_motor_label.text = "Right: "+str(right_motor)
+		self.left_motor_label.text = "Left: "+str(left_motor)
+
+		message = "l"+str(left_motor)+"r"+str(right_motor)
+		print(message)
+		MyRaspberryApp.send_commands.sendMessage(message)
+
+
 	pass
 
 class SendCommands():
@@ -45,170 +89,13 @@ class SendCommands():
 		except:
 			print("Not Connected")
 
-'''
-class SendCommand():
-	def startClient(self, *args):
-		#try:
-		HOST = '127.0.0.1'  # The server's hostname or IP address
-		PORT = 65433  # The port used by the server
-		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.s.connect((HOST, PORT))
-		print("Connected")
-		successPopup()
-		#except:
-		#	print("Could not connect")
-		#	errorPopup()
-	#Buttons:
-	def forwardLeft(self):
-		try:
-			print("Sent: Forward Left")
-			self.s.sendall(bytes("q", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def goForward(self):
-		try: 
-			print("Sent: Forward")
-			self.s.sendall(bytes("w", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def forwardRight(self):
-		try:
-			print("Sent: Forward Right")
-			self.s.sendall(bytes("e", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def left(self):
-		try:
-			print("Sent: Left")
-			self.s.sendall(bytes("a", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def stopHere(self):
-		try:
-			print("Sent: Stop")
-			self.s.sendall(bytes(" ", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def right(self):
-		try:
-			print("Sent: Right")
-			self.s.sendall(bytes("d", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def backwardLeft(self):
-		try:
-			print("Sent: Backward Left")
-			self.s.sendall(bytes("z", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def goBackward(self):
-		try:
-			print("Sent: Backward")
-			self.s.sendall(bytes("s", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def backwardRight(self):
-		try:
-			print("Sent: Backward Right")
-			self.s.sendall(bytes("x", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def program_1(self):
-		try:
-			print("Sent: Program 1")
-			self.s.sendall(bytes("1", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def program_2(self):
-		try:
-			print("Sent: Program 2")
-			self.s.sendall(bytes("2", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	def program_3(self):
-		try:
-			print("Sent: Program 3")
-			self.s.sendall(bytes("3", 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
-		except:
-			print("Not Connected")
-
-	#Sliders:
-	def leftSlider(self,value):
-		try:
-			print("Sent: Left Slider",value)
-			self.s.sendall(bytes("l"+str(value), 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Left Motor Set to:', datarefined)
-		except:
-			print("Not Connected")
-	
-	def rightSlider(self,value):
-		try:
-			print("Sent: Right Slider",value)
-			self.s.sendall(bytes("l"+str(value), 'utf-8'))
-			data = repr(self.s.recv(1024))
-			datarefined = data[2:len(data)-1:]
-			print('Right Motor Set to:', datarefined)
-		except:
-			print("Not Connected")
-	pass
-'''
-
 class SliderWindow(Screen):
 	
 	active = False
 	prev_left = "#"
 	prev_right = "#"
 
-	def send_values(self,left,right):
+	def send_values(self):
 		print("l",int(self.left_slider.value),"r",int(self.right_slider.value))
 		MyRaspberryApp.send_commands.sendMessage("l"+str(int(self.left_slider.value))+"r"+str(int(self.right_slider.value)))
 

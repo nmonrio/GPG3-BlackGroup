@@ -12,7 +12,7 @@ from kivy.properties import ObjectProperty
 from kivy.uix.label import Label
 from kivy.clock import Clock
 
-from functools import partial
+#from functools import partial
 
 #from kivy.garden.joystick import Joystick
 
@@ -23,21 +23,45 @@ class ButtonWindow(Screen):
 	pass
 
 class JoystickWindow(Screen):
-	'''
-	self.joystick_instance.bind(pad=self._update_pad_display)
+	
+	active = False
+	prev_x = "#"
+	prev_y = "#"
 
-	def _update_pad_display(self, instance, pad):
-		x, y = pad
-		x, y = (str(x)[0:5], str(y)[0:5])
-		x, y = (('x: ' + x), ('\ny: ' + y))
-		r = "radians: " + str(instance.radians)[0:5]
-		m = "\nmagnitude: " + str(instance.magnitude)[0:5]
-		a = "\nangle: " + str(instance.angle)[0:5]
-		#self.root.ids.pad_display_xy.text = "".join([x, y])
-		print("".join([x, y]))
-		#self.root.ids.pad_display_rma.text = "".join([r, m, a])
-		print("".join([r, m, a]))
-	'''
+	def send_values(self):
+		x = self.joystick_instance.pad_x*100
+		y = self.joystick_instance.pad_y*100
+		left_motor = "#"
+		right_motor = "#"
+
+		#first quadrant
+		if x >= 0 and y >= 0:
+			left_motor = int(round((x**2+y**2)**(1/2),0))
+			right_motor = int(round(y*(x**2+y**2)**(1/2)/100,0))
+
+		#second quadrant
+		elif x < 0 and y >= 0:
+			left_motor = int(round(y*(x**2+y**2)**(1/2)/100,0))
+			right_motor = int(round((x**2+y**2)**(1/2),0))
+
+		#third quadrant
+		elif x < 0 and y < 0:
+			left_motor = -int(round(y*(x**2+y**2)**(1/2)/100,0))
+			right_motor = -int(round((x**2+y**2)**(1/2),0))
+
+		#fourth quadrant
+		elif x >= 0 and y < 0:
+			left_motor = -int(round((x**2+y**2)**(1/2),0))
+			right_motor = -int(round(y*(x**2+y**2)**(1/2)/100,0))
+
+		self.right_motor_label.text = "Right: "+str(right_motor)
+		self.left_motor_label.text = "Left: "+str(left_motor)
+
+		message = "l"+str(left_motor)+"r"+str(right_motor)
+		print(message)
+		MyRaspberryApp.send_commands.sendMessage(message)
+
+
 	pass
 
 class SendCommands():
@@ -71,7 +95,7 @@ class SliderWindow(Screen):
 	prev_left = "#"
 	prev_right = "#"
 
-	def send_values(self,left,right):
+	def send_values(self):
 		print("l",int(self.left_slider.value),"r",int(self.right_slider.value))
 		MyRaspberryApp.send_commands.sendMessage("l"+str(int(self.left_slider.value))+"r"+str(int(self.right_slider.value)))
 

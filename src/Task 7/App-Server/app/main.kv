@@ -56,6 +56,12 @@ WindowManager:
 
 <JoystickWindow>:
 	name: "joystick"
+	joystick_instance: joystick_instance
+	left_motor_label: left_motor_label
+	right_motor_label: right_motor_label
+	on_enter: 
+		root.active = True
+		self.send_values()
 
 	GridLayout:
 		cols:1
@@ -63,24 +69,46 @@ WindowManager:
 			cols: 2
 			Label:
 				id: x_position
-				text: "joystick_instance.pad[0]"
+				text: "x: "+str(round(joystick_instance.pad_x*100,0))
 			Label:
 				id: y_position
-				text: "joystick_instance.pad[1]"
+				text: "y: "+str(round(joystick_instance.pad_y*100,0))
+			Label:
+				id: left_motor_label
+				text: "Left: "
+			Label:
+				id: right_motor_label
+				text: "Right: "
 		Joystick:
 			id: joystick_instance
+			on_touch_move:
+				if ((root.active == True) and not (root.prev_x == joystick_instance.pad_x and root.prev_y == joystick_instance.pad_y)): \
+				self.parent.parent.send_values(); \ 
+				root.prev_x = joystick_instance.pad_x; \
+				root.prev_y = joystick_instance.pad_y
+			on_touch_down:
+				if ((root.active == True) and not (root.prev_x == joystick_instance.pad_x and root.prev_y == joystick_instance.pad_y)): \
+				self.parent.parent.send_values(); \ 
+				root.prev_x = joystick_instance.pad_x; \
+				root.prev_y = joystick_instance.pad_y
+			on_touch_up:
+				joystick_instance.pad_x = 0
+				joystick_instance.pad_y = 0
+				self.parent.parent.send_values()
 		Label:
 		Button:
 			text: "Home"
 			on_press:
 				app.root.current = "main"
 				root.manager.transition.direction = "right"
+				self.parent.parent.send_values()
+				root.active = False
 
 <SliderWindow>:
 	name: "sliders"
 	on_enter: 
 		root.active = True
-		self.send_values(left_slider.value,right_slider.value)
+		self.send_values()
 	left_slider: left_slider
 	right_slider: right_slider
 	
@@ -101,12 +129,12 @@ WindowManager:
 					orientation: 'vertical'
 					on_touch_move:
 						if ((root.active == True) and not (root.prev_left == left_slider.value and root.prev_right == right_slider.value)): \
-						self.parent.parent.parent.parent.send_values(left_slider.value,right_slider.value); \ 
+						self.parent.parent.parent.parent.send_values(); \ 
 						root.prev_left = left_slider.value; \
 						root.prev_right = right_slider.value
 					on_touch_down:
 						if ((root.active == True) and not (root.prev_left == left_slider.value and root.prev_right == right_slider.value)): \
-						self.parent.parent.parent.parent.send_values(left_slider.value,right_slider.value); \ 
+						self.parent.parent.parent.parent.send_values(); \ 
 						root.prev_left = left_slider.value; \
 						root.prev_right = right_slider.value
 
@@ -123,7 +151,11 @@ WindowManager:
 					value: 0
 					step: 1
 					orientation: 'vertical'
-
+					on_touch_down:
+						if ((root.active == True) and not (root.prev_left == left_slider.value and root.prev_right == right_slider.value)): \
+						self.parent.parent.parent.parent.send_values(); \ 
+						root.prev_left = left_slider.value; \
+						root.prev_right = right_slider.value
 				Label:
 					text: str(right_slider.value)
 		GridLayout:
@@ -133,13 +165,13 @@ WindowManager:
 				on_press:
 					left_slider.value = 0
 					right_slider.value = 0
-					self.parent.parent.parent.send_values(0,0)
+					self.parent.parent.parent.send_values()
 			Button:
 				text: "Home"
 				on_press:
 					left_slider.value = 0
 					right_slider.value = 0
-					self.parent.parent.parent.send_values(0,0)
+					self.parent.parent.parent.send_values()
 					app.root.current = "main"
 					root.manager.transition.direction = "right"
 					root.active = False
