@@ -45,7 +45,7 @@ while not detected:
         if wall():
             gpg.turn_degrees(90)
             veryfying = False
-        if not wall():
+        elif not wall():
             gpg.turn_degrees(90-alpha) #right: to put gpg on circular path
             gpg.orbit(-dgr, dist+5)
             gpg.turn_degrees(-90) #left: to focus on obstacle direction
