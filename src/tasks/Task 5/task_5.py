@@ -1,15 +1,20 @@
 import time
 import easygopigo3 as easy
+import numpy as np
 
 gpg = easy.EasyGoPiGo3()
 actions = []
 
+
+
 def parse_command(command):
-    tokens = command.split()
+    f = open('HOLIII.txt')
+    lines = f.readlines()
+    
     structured_command = {}
     name = tokens[0]
     parameters = tokens[1::]
-    structured_command["NAME"] = name
+    structured_command["NAME"] = lines[]
     structured_command["PARAMETERS"] = parameters
     return structured_command
 
@@ -54,35 +59,5 @@ def execute_command(command):
     return
 
 if __name__=="__main__":
-    time = 0
-    while time < 100 or time > 2000:
-        time = int(input("Tell me the time to wait between commands in ms, (100-2000) taking into account that you will not be able to enter a new command until the one running is finished."))
-    print("The commands are:")
-    print("For moving: MV and the direction (L, R, F, B)")
-    print("For setting the speed: SET SPEED")
-    print("For stopping the motion: STOP")
-    
-    
-    command = input("Introduce command: ")
-    structured_command = parse_command(command)
-    is_valid = is_valid_command(structured_command)
-    if is_valid == True:
-        execute_command(command)
-    while structured_command["NAME"] != "STOP":
-        command = input("Introduce command: ")
-        structured_command = parse_command(command)
-        is_valid = is_valid_command(structured_command)
-        if is_valid == True:
-            execute_command(command)
-            gpg.sleep_ms(time)
-    if structured_command["NAME"] == "STOP":
-        print("The actions you have done are: ")
-        for i in range(len(actions)):
-            if actions[i][0] == "MV":
-                print("The robot has moved in direction: "+str(structured_command["PARAMETERS"][0]))
-            if actions[i][0] == "SET":
-                print("The velocity was set to: "+str(structured_command["PARAMETERS"][1]))
-            if actions[i][0] == "STOP":
-                print("The robot was stopped.")
     
     

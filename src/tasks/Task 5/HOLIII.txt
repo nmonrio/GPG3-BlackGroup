@@ -1,0 +1,4 @@
+MV R
+SET SPEED 50
+MV B
+STOP
