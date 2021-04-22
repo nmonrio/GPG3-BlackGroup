@@ -1,8 +1,7 @@
 import time
 import easygopigo3 as easy
-import gopigo
 
-GPG = gopigo3.GoPiGo3()
+gpg = easy.EasyGoPiGo3()
 actions = []
 vector = []
 
@@ -21,6 +20,8 @@ def is_valid_command(command):
         is_valid = len(structured_command["PARAMETERS"]) == 2
         is_valid = is_valid and structured_command["PARAMETERS"][0] == "SPEED"
         is_valid = is_valid and structured_command["PARAMETERS"][1].isnumeric()
+        is_valid = is_valid and structured_command["PARAMETERS"][1] < 100
+        is_valid = is_valid and structured_command["PARAMETERS"][1] > 0
     
     if structured_command["NAME"] == "MV":
         is_valid = structured_command["PARAMETERS"][0] == "R" or structured_command["PARAMETERS"][0] == "L" or structured_command["PARAMETERS"][0] == "B" or structured_command["PARAMETERS"][0] == "F"
@@ -32,23 +33,21 @@ def is_valid_command(command):
 def execute_command(command):
     if structured_command["NAME"] == "SET":
         i = int(structured_command["PARAMETERS"][1])
-        gpg.robot(i)
+        gpg.set_speed(i)
     if structured_command["NAME"] == "STOP":
         gpg.stop()
     if structured_command["NAME"] == "MV":
         actions.append("MV"+str(structured_command["PARAMETERS"]))
         if structured_command["PARAMETERS"][0] == "R":
-            gpg.rotate_degrees(90)
+            gpg.turn_degrees(90)
             gpg.forward()
-            gpg.sleep(1)
         if structured_command["PARAMETERS"][0] == "L":
-            gpg.rotate_degrees(-90)
+            gpg.turn_degrees(-90)
             gpg.forward()
         if structured_command["PARAMETERS"][0] == "F":
-            gpg.rotate_degrees(0)
             gpg.forward()
         if structured_command["PARAMETERS"][0] == "B":
-            gpg.rotate_degress(180)
+            gpg.turn_degrees(180)
             gpg.forward()
     
     return
