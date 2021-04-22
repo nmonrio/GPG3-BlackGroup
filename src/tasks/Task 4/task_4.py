@@ -3,7 +3,6 @@ import easygopigo3 as easy
 
 gpg = easy.EasyGoPiGo3()
 actions = []
-vector = []
 
 def parse_command(command):
     tokens = command.split()
@@ -49,6 +48,8 @@ def execute_command(command):
         if structured_command["PARAMETERS"][0] == "B":
             gpg.turn_degrees(180)
             gpg.forward()
+
+    actions.append(structured_command)
     
     return
 
@@ -61,30 +62,22 @@ if __name__=="__main__":
     
     command = input("Introduce command: ")
     structured_command = parse_command(command)
-    print(structured_command)
     is_valid = is_valid_command(structured_command)
-    print(is_valid)
     if is_valid == True:
         execute_command(command)
     while structured_command["NAME"] != "STOP":
-        vector.clear()
         command = input("Introduce command: ")
         structured_command = parse_command(command)
-        print(structured_command)
         is_valid = is_valid_command(structured_command)
-        print(is_valid)
         if is_valid == True:
             execute_command(command)
-        vector.append(structured_command["NAME"])
-        vector.append(structured_command["PARAMETERS"])
-        actions.append(vector)
     if structured_command["NAME"] == "STOP":
-        print("The actions you did where: ")
         for i in range(len(actions)):
-            for j in range(len(actions[i])):
-                print(actions[i][j])
-                print("")
-    
-    
+            if actions[i][0] == "MV":
+                pass
+            if actions[i][0] == "MV":
+                pass
+            if actions[i][0] == "MV":
+                pass
     
     
