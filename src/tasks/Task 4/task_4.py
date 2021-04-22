@@ -1,5 +1,6 @@
 import time
-import gopigo3
+import easygopigo3 as easy
+import gopigo
 
 GPG = gopigo3.GoPiGo3()
 actions = []
