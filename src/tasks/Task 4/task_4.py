@@ -1,7 +1,7 @@
 import time
-import easygopigo3 as easy
+import gopigo3
 
-gpg = easy.EasyGoPiGo3()
+GPG = gopigo3.GoPiGo3()
 actions = []
 
 
@@ -66,6 +66,14 @@ if __name__=="__main__":
     print(is_valid)
     if is_valid == True:
         execute_command(command)
+    while structured_command["NAME"] != "STOP":
+        command = input("Introduce command: ")
+        structured_command = parse_command(command)
+        print(structured_command)
+        is_valid = is_valid_command(structured_command)
+        print(is_valid)
+        if is_valid == True:
+            execute_command(command)
     
     
     
