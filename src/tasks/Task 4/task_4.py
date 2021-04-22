@@ -4,7 +4,7 @@ import gopigo
 
 GPG = gopigo3.GoPiGo3()
 actions = []
-
+vector = []
 
 def parse_command(command):
     tokens = command.split()
@@ -68,6 +68,7 @@ if __name__=="__main__":
     if is_valid == True:
         execute_command(command)
     while structured_command["NAME"] != "STOP":
+        vector.clear()
         command = input("Introduce command: ")
         structured_command = parse_command(command)
         print(structured_command)
@@ -75,6 +76,15 @@ if __name__=="__main__":
         print(is_valid)
         if is_valid == True:
             execute_command(command)
+        vector.append(structured_command["NAME"])
+        vector.append(structured_command["PARAMETERS"])
+        actions.append(vector)
+    if structured_command["NAME"] == "STOP":
+        print("The actions you did where: ")
+        for i in range(len(actions)):
+            for j in range(len(actions[i])):
+                print(actions[i][j])
+                print("")
     
     
     
