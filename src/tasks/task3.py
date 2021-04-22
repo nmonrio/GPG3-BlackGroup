@@ -28,15 +28,22 @@ def forward_until_obstacle():
     gpg.stop()
 
 def destination_free():
-    gpg.turn_degrees(alpha)
-    condition = (my_distance_sensor.read_mm() >= l*10)
+    condition=True
+    gpg.turn_degrees(alpha-20)
+    i=0
+    while condition and i<3:
+        if my_distance_sensor.read_mm() < l*10:
+            condition=False
+        if i<2:
+            gpg.turn_degrees(20)
+        i+=1  
     return condition
 
 def identify_obstacle():
     scans = 0
     veryfy=True
     while destination_free() and scans < n and veryfy:
-        gpg.turn_degrees(90-alpha) #right: to put gpg on circular track
+        gpg.turn_degrees(70-alpha) #right: to put gpg on circular track
         gpg.orbit(-dgr, dist+5)
         gpg.turn_degrees(-90) #left: to focus on obstacle direction
         if (my_distance_sensor.read_mm() <= dist*10):
