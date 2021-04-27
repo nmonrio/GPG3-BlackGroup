@@ -19,7 +19,7 @@ def is_valid_command(command):
         is_valid = len(structured_command["PARAMETERS"]) == 2
         is_valid = is_valid and structured_command["PARAMETERS"][0].upper() == "SPEED"
         is_valid = is_valid and structured_command["PARAMETERS"][1].isnumeric()
-        is_valid = is_valid and int(structured_command["PARAMETERS"][1]) < 100
+        is_valid = is_valid and int(structured_command["PARAMETERS"][1]) < 255
         is_valid = is_valid and int(structured_command["PARAMETERS"][1]) > 0
     
     if structured_command["NAME"] == "MV":
@@ -54,26 +54,26 @@ def execute_command(command):
     return
 
 if __name__=="__main__":
-    time = 0
-    while time < 100 or time > 2000:
-        time = int(input("Tell me the time to wait between commands in ms, (100-2000) taking into account that you will not be able to enter a new command until the one running is finished."))
-    print("The commands are:")
+    time_ = 0
+    while time_ < 100 or time_ > 2000:
+        time_ = int(input("Tell me the time to wait between commands in ms, (0-2000). 0ms is recommended"))
     print("For moving: MV and the direction (L, R, F, B)")
     print("For setting the speed: SET SPEED")
     print("For stopping the motion: STOP")
     
     
-    command = input("Introduce command: ")
+    command = input("Introduce command: ").upper()
     structured_command = parse_command(command)
     is_valid = is_valid_command(structured_command)
     if is_valid == True:
         execute_command(command)
     while structured_command["NAME"] != "STOP":
-        command = input("Introduce command: ")
+        command = input("Introduce command: ").upper()
         structured_command = parse_command(command)
         is_valid = is_valid_command(structured_command)
         if is_valid == True:
             execute_command(command)
+        time.sleep(time_)
             
     if structured_command["NAME"] == "STOP":
         print("The actions you have done are: ")
