@@ -8,13 +8,11 @@ actions = []
 
 
 def parse_command(command):
-    f = open('HOLIII.txt')
-    lines = f.readlines()
-    
+    tokens = i.split()
     structured_command = {}
     name = tokens[0]
     parameters = tokens[1::]
-    structured_command["NAME"] = lines[]
+    structured_command["NAME"] = 
     structured_command["PARAMETERS"] = parameters
     return structured_command
 
@@ -59,5 +57,20 @@ def execute_command(command):
     return
 
 if __name__=="__main__":
-    
-    
+    f = open('HOLIII.txt')
+    lines = f.readlines()
+    for i in lines:
+        i = i.upper()
+
+    is_all_valid = True 
+    for i in lines:
+        i = command
+        structured_command = parse_command(command)
+        is_all_valid = is_all_valid and is_valid_command(command)
+
+    if is_all_valid == True:
+        print("Those instructions can be done: ")
+        for i in lines:
+            print(i)
+            i = command
+            execute_command(command)
