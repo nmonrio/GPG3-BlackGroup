@@ -4,6 +4,8 @@ import easygopigo3 as easy
 gpg = easy.EasyGoPiGo3()
 actions = []
 
+gpg_servo = gpg.init_servo("SERVO1")
+
 def parse_command(command):
     tokens = command.split()
     structured_command = {}
@@ -54,6 +56,7 @@ def execute_command(command):
     return
 
 if __name__=="__main__":
+    gpg_servo.rotate_servo(90)
     time_ = 0
     while time_ < 100 or time_ > 2000:
         time_ = int(input("Tell me the time to wait between commands in ms, (0-2000). 0ms is recommended"))
