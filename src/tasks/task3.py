@@ -17,8 +17,6 @@ while dist<10:
     dist=int(input("Enter the minimum distance at which the obstacle is detected (between 10/20 cm)--->"))
     
 dgr = 360/n
-alpha = (180-90-dgr/2)
-l = 2*(dist+5)*np.cos(alpha)+12
 end = False
 
 def forward_until_obstacle():
@@ -29,26 +27,27 @@ def forward_until_obstacle():
     gpg.stop()
 
 def destination_free():
-    condition=True
-    gpg_servo.rotate_servo(90+alpha)
-    while condition:
-        if my_distance_sensor.read_mm() < l*10:
-            condition=False
-    gpg_servo.rotate_servo(90)
-        
+    condition = my_distance_sensor.read_mm() >100: 
     return condition
+ 
+def surround():
+    i=1
+    while i<21 and destination_free():
+        gpg.orbit(-dgr/20, dist+5)
+        gpg_servo.rotate_servo(90+i*90/20)
+        i+=1
+    gpg_servo.rotate_servo(0) #izquierda mirando objeto
+    
 
 def identify_obstacle():
     scans = 0
     verify=True
+    gpg.turn_degrees(90) #circular path
     while destination_free() and scans < n and verify:
-        gpg.turn_degrees(90) #right: to put gpg on circular track
-        gpg.orbit(-dgr, dist+5)
-        gpg_servo.rotate_servo(0) #left: to focus on obstacle direction
+        surround()
         if (my_distance_sensor.read_mm() <= dist*10):
             scans += 1
         else:
-            gpg_servo.rotate_servo(90)
             verify=False
     return scans == n
 
@@ -59,4 +58,5 @@ if __name__ == "__main__":
             print("Sentinel Identified Object")
             end = True
         else:
-            gpg.turn_degrees(100) 
+            gpg.turn_degrees(100)
+            gpg_servo.rotate_servo(90)
