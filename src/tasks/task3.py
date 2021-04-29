@@ -2,6 +2,7 @@ import easygopigo3 as easy
 import numpy as np
 
 gpg = easy.EasyGoPiGo3()
+gpg_servo = gpg.init_servo('SERVO1')
 
 my_distance_sensor = gpg.init_distance_sensor('AD2')
 
@@ -29,26 +30,25 @@ def forward_until_obstacle():
 
 def destination_free():
     condition=True
-    gpg.turn_degrees(alpha-20)
-    i=0
-    while condition and i<3:
+    gpg_servo.rotate_servo(90+alpha)
+    while condition:
         if my_distance_sensor.read_mm() < l*10:
             condition=False
-        if i<2:
-            gpg.turn_degrees(20)
-        i+=1  
+    gpg_servo.rotate_servo(90)
+        
     return condition
 
 def identify_obstacle():
     scans = 0
     veryfy=True
     while destination_free() and scans < n and veryfy:
-        gpg.turn_degrees(70-alpha) #right: to put gpg on circular track
+        gpg.turn_degrees(90) #right: to put gpg on circular track
         gpg.orbit(-dgr, dist+5)
-        gpg.turn_degrees(-90) #left: to focus on obstacle direction
+        gpg_servo.rotate_servo(0) #left: to focus on obstacle direction
         if (my_distance_sensor.read_mm() <= dist*10):
             scans += 1
         else:
+            gpg_servo.rotate_servo(90)
             veryfy=False
     return scans == n
 
