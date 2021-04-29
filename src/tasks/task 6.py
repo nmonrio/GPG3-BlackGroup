@@ -16,7 +16,7 @@ def forward_until_obstacle():
     gpg.stop()
 
 def destination_free():
-    gopigo.set_speed(10)
+    gopigo.set_speed(50)
     gopigo.right_rot() # Rotate left 90º with motors in opposite direction?
     condition = (my_distance_sensor.read_mm() >= 100)
     return condition
