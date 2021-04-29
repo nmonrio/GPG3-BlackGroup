@@ -3,12 +3,10 @@ import math
 from easygopigo3 import EasyGoPiGo3
 import easygopigo3 as easy
 gpg = easy.EasyGoPiGo3()
-my_distance_sensor = gpg.init_distance_sensor('AD2')
+my_distance_sensor = gpg.init_distance_sensor('AD1')
 
-gpg = EasyGoPiGo3()  # Create object instance of the robot
-
-def destination_free():
-    condition = (my_distance_sensor.read_mm() >= (length+12)*10)
+def destination_free(l_cm):
+    condition = (my_distance_sensor.read_mm() >= l_cm*10)
     return condition
 
 # Drawing a square:
@@ -48,12 +46,12 @@ time.sleep(5)
 # 2. Rectangular triangle
 length_one_side = 40
 length_other_side = 30
-legnth_hypotenuse = math.sqrt((length_one_side**2)+(length_other_side**2)))
-    gpg.drive_cm(length_one_side)
-    gpg.turn_degrees(90)
-    gpg.drive_cm(legnth_other_side)
-    gpg.turn_degrees(180-math.atan(length_one_side/legnth_other_side)
-    gpg.drive(length_hypotenuse)
+length_hypotenuse = math.sqrt((length_one_side**2)+(length_other_side**2))
+gpg.drive_cm(length_one_side)
+gpg.turn_degrees(90)
+gpg.drive_cm(length_other_side)
+gpg.turn_degrees(180-(math.atan(length_one_side/length_other_side))*180/np.pi)
+gpg.drive_cm(length_hypotenuse)
 
 time.sleep(5)
                      
@@ -65,13 +63,8 @@ length = int(input("Introduce the length of the sides in cm"))
 alpha = 360/n
                      
 for v in range(n):
-    if destination_free():
-                 gpg.drive_cm(length)
-                 gpg.turn_degrees(alpha)
+    if destination_free(length):
+        gpg.drive_cm(length)
+        gpg.turn_degrees(alpha)
     else:
-                 gpg.turn_degrees(90)
-    
-    
-
-        
-
+        gpg.turn_degrees(90)
