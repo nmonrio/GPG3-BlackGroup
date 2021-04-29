@@ -46,7 +46,7 @@ for i in range(3):
 time.sleep(5)
 
 # 2. Rectangular triangle
-length_one_side = 60
+length_one_side = 40
 length_other_side = 30
 legnth_hypotenuse = math.sqrt((length_one_side**2)+(length_other_side**2)))
     gpg.drive_cm(length_one_side)
