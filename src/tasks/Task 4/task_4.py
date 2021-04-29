@@ -1,3 +1,20 @@
+
+
+Ir al contenido
+Uso de Correo de UC3M con lectores de pantalla
+Habilita las notificaciones de escritorio para Correo de UC3M.
+   Aceptar  No, gracias
+1 de 791
+Task 4
+Recibidos
+
+BERNAT FRANGI MAHIQUES
+Adjuntos
+10:43 (hace 9 minutos)
+para mí
+
+
+Zona de los archivos adjuntos
 import time
 import easygopigo3 as easy
 
@@ -57,9 +74,9 @@ def execute_command(command):
 
 if __name__=="__main__":
     gpg_servo.rotate_servo(90)
-    time_ = int(input("Tell me the time to wait between commands in ms, (0-5000). 0ms is recommended: \n"))/1000
+    time_ = int(input("Tell me the time to wait between commands in ms, (0-5000). 0ms is recommended\n"))
     while time_ < 0 or time_ > 5000:
-        time_ = int(input("Tell me the time to wait between commands in ms, (0-5000). 0ms is recommended: \n"))/1000
+        time_ = int(input("Tell me the time to wait between commands in ms, (0-5000). 0ms is recommended\n"))
     print("For moving: MV and the direction (L, R, F, B)")
     print("For setting the speed: SET SPEED")
     print("For stopping the motion: STOP")
@@ -76,7 +93,7 @@ if __name__=="__main__":
         is_valid = is_valid_command(structured_command)
         if is_valid == True:
             execute_command(command)
-        time.sleep(time_)
+        time.sleep(time_/1000)
             
     if structured_command["NAME"] == "STOP":
         print("The actions you have done are: ")
@@ -88,3 +105,5 @@ if __name__=="__main__":
                 print("The velocity was set to: "+str(i["PARAMETERS"][1]))
             if i['NAME'] == "STOP":
                 print("The robot was stopped.")
+task_4.py
+Mostrando task_4.py.

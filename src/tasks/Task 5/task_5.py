@@ -8,11 +8,11 @@ actions = []
 
 
 def parse_command(command):
-    tokens = i.split()
+    tokens = command.split()
     structured_command = {}
     name = tokens[0]
     parameters = tokens[1::]
-    structured_command["NAME"] = 
+    structured_command["NAME"] = name
     structured_command["PARAMETERS"] = parameters
     return structured_command
 
@@ -22,9 +22,8 @@ def is_valid_command(command):
         is_valid = len(structured_command["PARAMETERS"]) == 2
         is_valid = is_valid and structured_command["PARAMETERS"][0] == "SPEED"
         is_valid = is_valid and structured_command["PARAMETERS"][1].isnumeric()
-        is_valid = is_valid and structured_command["PARAMETERS"][1] < 100
-        is_valid = is_valid and structured_command["PARAMETERS"][1] > 0
-    
+        is_valid = is_valid and int(structured_command["PARAMETERS"][1]) < 255
+        is_valid = is_valid and int(structured_command["PARAMETERS"][1]) > 0
     if structured_command["NAME"] == "MV":
         is_valid = structured_command["PARAMETERS"][0] == "R" or structured_command["PARAMETERS"][0] == "L" or structured_command["PARAMETERS"][0] == "B" or structured_command["PARAMETERS"][0] == "F"
     if structured_command["NAME"] == "STOP":
@@ -33,6 +32,7 @@ def is_valid_command(command):
 
 
 def execute_command(command):
+    structured_command = parse_command(command)
     if structured_command["NAME"] == "SET":
         i = int(structured_command["PARAMETERS"][1])
         gpg.set_speed(i)
@@ -59,18 +59,19 @@ def execute_command(command):
 if __name__=="__main__":
     f = open('HOLIII.txt')
     lines = f.readlines()
-    for i in lines:
-        i = i.upper()
-
-    is_all_valid = True 
-    for i in lines:
-        i = command
+    commands = []
+    for i in range(len(lines)-1):
+        commands.append(((lines[i])[:len(lines[i])-1:]).upper())
+    commands.append("STOP")
+    print(commands)
+    is_all_valid = True
+    for command in commands:
         structured_command = parse_command(command)
-        is_all_valid = is_all_valid and is_valid_command(command)
-
-    if is_all_valid == True:
-        print("Those instructions can be done: ")
-        for i in lines:
-            print(i)
-            i = command
+        is_all_valid = is_all_valid and is_valid_command(structured_command)
+    print(is_all_valid)
+    if is_all_valid:
+        for command in commands:
+            print(command)
             execute_command(command)
+            time.sleep(5)
+        
