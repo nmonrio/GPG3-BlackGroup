@@ -1,5 +1,8 @@
 import easygopigo3 as easy
 import numpy as np
+#define right_rot_cmd   110     //Rotate Right by running both motors is opposite direction
+#define left_rot_cmd    98      //Rotate left by running both motors is opposite direction
+
 
 gpg = easy.EasyGoPiGo3()
 
@@ -13,7 +16,8 @@ def forward_until_obstacle():
     gpg.stop()
 
 def destination_free():
-    gpg.turn_degrees(90)
+    gopigo.set_speed(10)
+    gopigo.right_rot() # Rotate left 90º with motors in opposite direction?
     condition = (my_distance_sensor.read_mm() >= 100)
     return condition
 
