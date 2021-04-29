@@ -57,9 +57,9 @@ def execute_command(command):
 
 if __name__=="__main__":
     gpg_servo.rotate_servo(90)
-    time_ = 0
-    while time_ < 100 or time_ > 2000:
-        time_ = int(input("Tell me the time to wait between commands in ms, (0-2000). 0ms is recommended"))
+    time_ = int(input("Tell me the time to wait between commands in ms, (0-5000). 0ms is recommended: \n"))/1000
+    while time_ < 0 or time_ > 5000:
+        time_ = int(input("Tell me the time to wait between commands in ms, (0-5000). 0ms is recommended: \n"))/1000
     print("For moving: MV and the direction (L, R, F, B)")
     print("For setting the speed: SET SPEED")
     print("For stopping the motion: STOP")
