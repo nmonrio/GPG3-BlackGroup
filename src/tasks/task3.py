@@ -40,8 +40,8 @@ def destination_free():
 
 def identify_obstacle():
     scans = 0
-    veryfy=True
-    while destination_free() and scans < n and veryfy:
+    verify=True
+    while destination_free() and scans < n and verify:
         gpg.turn_degrees(90) #right: to put gpg on circular track
         gpg.orbit(-dgr, dist+5)
         gpg_servo.rotate_servo(0) #left: to focus on obstacle direction
@@ -49,7 +49,7 @@ def identify_obstacle():
             scans += 1
         else:
             gpg_servo.rotate_servo(90)
-            veryfy=False
+            verify=False
     return scans == n
 
 if __name__ == "__main__":
