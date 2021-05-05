@@ -8,7 +8,7 @@ import presets
 #TODO: Create method for changing colour when mouse click on grid tile
 #TODO: Create method for storing that position matrix wise as list
 
-# IMPORTED GRID RELATED METHODS
+# IMPORTED GRID RELATED METHODS -> might be of later use
 def get_tile_colour(tile_contents):
     """
     Method for retrieving colour from a set of characters. Useful when implementing the task 7 on already created grids
