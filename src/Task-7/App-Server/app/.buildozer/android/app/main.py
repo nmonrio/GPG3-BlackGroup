@@ -16,10 +16,15 @@ from kivy.clock import Clock
 
 #from kivy.garden.joystick import Joystick
 
+#Screens
 class MainWindow(Screen):
 	pass
 
 class ButtonWindow(Screen):
+	pass
+
+class ServoSensor(Screen):
+	measurement_value = "n/a"
 	pass
 
 class JoystickWindow(Screen):
@@ -60,12 +65,11 @@ class JoystickWindow(Screen):
 		message = "l"+str(left_motor)+"r"+str(right_motor)
 		print(message)
 		MyRaspberryApp.send_commands.sendMessage(message)
-
-
 	pass
 
 class SendCommands():
 	def startClient(self, host_name, port_name):
+		ServoSensor.measurement_value = "kndkn"
 		try:
 			HOST = '127.0.0.1'  # The server's hostname or IP address (this is the default)
 			HOST = host_name
@@ -85,7 +89,10 @@ class SendCommands():
 			self.s.sendall(bytes(str(command), 'utf-8'))
 			data = repr(self.s.recv(1024))
 			datarefined = data[2:len(data)-1:]
-			print('Received: Executing', datarefined)
+			if datarefined[0:6:] == "sensor":
+				ServoSensor.measurement_value =	datarefined[6::] 		
+			else:
+				print('Received: Executing', datarefined)
 		except:
 			print("Not Connected")
 
@@ -101,9 +108,13 @@ class SliderWindow(Screen):
 
 	pass
 
+class TasksWindow(Screen):
+	pass
+
 class WindowManager(ScreenManager):
 	pass
 
+#Popups
 class popupConnectionError(FloatLayout):
 	pass
 class popupConnectionSuccess(FloatLayout):

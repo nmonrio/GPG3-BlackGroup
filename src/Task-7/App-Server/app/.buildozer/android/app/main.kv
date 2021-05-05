@@ -3,6 +3,8 @@ WindowManager:
 	SliderWindow:
 	ButtonWindow:
 	JoystickWindow:
+	TasksWindow:
+	ServoSensor:
 
 
 
@@ -17,12 +19,12 @@ WindowManager:
 
 			TextInput:
 				id: ip
-				text: "127.0.0.1"
+				text: "10.10.10.10"
 				multiline: False
 
 			TextInput:
 				id: port
-				text: "65433"
+				text: "65432"
 				multiline: False
 
 			Button:
@@ -50,6 +52,18 @@ WindowManager:
 			text: "Joystick"
 			on_release:
 				app.root.current = "joystick"
+				root.manager.transition.direction = "left"
+		Button:
+			id: go_to_servo
+			text: "Servo Sensor"
+			on_release:
+				app.root.current = "servo"
+				root.manager.transition.direction = "left"
+		Button:
+			id: go_to_tasks
+			text: "Tasks"
+			on_release:
+				app.root.current = "tasks"
 				root.manager.transition.direction = "left"
 
 #: import Joystick kivy.garden.joystick.Joystick
@@ -273,10 +287,120 @@ WindowManager:
 			on_release: 
 				app.root.current = "main"
 				root.manager.transition.direction = "right"
-			
+
+<TasksWindow>:
+	name: "tasks"
+
+	GridLayout:
+		cols: 1
+		GridLayout:
+			cols: 2
+
+			Button:
+				text: "Task 2"
+				on_release: app.send_commands.sendMessage("task2")
+			Label:
+				text: "Task 2: Drawing Geometrical Shapes"
+				text_size: self.width, None
+				size: self.texture_size
+				halign: 'center'
+				padding_x: 30
+				pos_hint: {"x":0, "top":1}
+		GridLayout:
+			cols: 2
+			Button:
+				text: "Task 3"
+				on_release: app.send_commands.sendMessage("task3")
+			Label:
+				text: "Task 3: Finding The Object"
+				text_size: self.width, None
+				size: self.texture_size
+				halign: 'center'
+				padding_x: 30
+				pos_hint: {"x":0, "top":1}
+		GridLayout:
+			cols: 2
+			Button:
+				text: "Task 4"
+				on_release: app.send_commands.sendMessage("task4")
+			Label:
+				text: "Task 4: Description"
+				text_size: self.width, None
+				size: self.texture_size
+				halign: 'center'
+				padding_x: 30
+				pos_hint: {"x":0, "top":1}
+		GridLayout:
+			cols: 2
+			Button:
+				text: "Task 5"
+				on_release: app.send_commands.sendMessage("task5")
+			Label:
+				text: "Task 5: Description"
+				text_size: self.width, None
+				size: self.texture_size
+				halign: 'center'
+				padding_x: 30
+				pos_hint: {"x":0, "top":1}
+		GridLayout:
+			cols: 2
+			Button:
+				text: "Task 6"
+				on_release: app.send_commands.sendMessage("task6")
+			Label:
+				text: "Task 6: Description"
+				text_size: self.width, None
+				size: self.texture_size
+				halign: 'center'
+				padding_x: 30
+				pos_hint: {"x":0, "top":1}
+		Button:
+			text: "Home"
+			on_release: 
+				app.root.current = "main"
+				root.manager.transition.direction = "right"
+
+<ServoSensor>:
+	name: "servo"
+	measurement:measurement
+	GridLayout:
+		cols: 1
+		Label:
+			text_size: self.width, None
+			size: self.texture_size
+			halign: 'center'
+			padding_x: 30
+			text: "Move the Servo with the arrows. Press o to rotate home. Press Measure to read the sensor"
+			pos_hint: {"x":0, "top":1}
+		GridLayout:
+			cols: 3
+			Button:
+				text: "<"
+				on_release: app.send_commands.sendMessage("servol")
+			Button:
+				text: "o"
+				on_release: app.send_commands.sendMessage("servoh")
+			Button:
+				text: ">"
+				on_release: app.send_commands.sendMessage("servor")
+		Button:
+			text: "Measure"
+			on_release: 
+				app.send_commands.sendMessage("measure")
+				self.parent.parent.measurement.text = self.parent.parent.measurement_value
+		Label:
+			id: measurement
+			text: "n/a"
+		Button:
+			text: "Home"
+			on_release: 
+				app.root.current = "main"
+				root.manager.transition.direction = "right"
+
+
 <popupConnectionError>:
 	Label:
-		text_size: root.width, None
+		text_size: self.width, None
 		size: self.texture_size
 		halign: 'center'
 		padding_x: 30
@@ -285,7 +409,7 @@ WindowManager:
 
 <popupConnectionSuccess>:
 	Label:
-		text_size: root.width, None
+		text_size: self.width, None
 		size: self.texture_size
 		halign: 'center'
 		padding_x: 30

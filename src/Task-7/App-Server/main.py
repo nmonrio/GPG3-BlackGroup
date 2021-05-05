@@ -16,7 +16,6 @@ from kivy.clock import Clock
 
 #from kivy.garden.joystick import Joystick
 
-#Screens
 class MainWindow(Screen):
 	pass
 
@@ -102,13 +101,9 @@ class SliderWindow(Screen):
 
 	pass
 
-class TasksWindow(Screen):
-	pass
-
 class WindowManager(ScreenManager):
 	pass
 
-#Popups
 class popupConnectionError(FloatLayout):
 	pass
 class popupConnectionSuccess(FloatLayout):

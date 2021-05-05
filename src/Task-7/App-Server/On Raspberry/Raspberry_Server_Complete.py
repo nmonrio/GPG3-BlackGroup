@@ -3,8 +3,12 @@ import easygopigo3 as easy
 my_gpg3 = easy.EasyGoPiGo3()
 #HOST = '127.0.0.1'
 HOST = '10.10.10.10'  # Standard loopback interface address (localhost)
-PORT = 65434        # Port to listen on (non-privileged ports are > 1023)
-#GPG = gopigo3.GoPiGo3() 
+PORT = 65439        # Port to listen on (non-privileged ports are > 1023)
+
+my_distance_sensor = my_gpg3.init_distance_sensor('AD1')
+gpg_servo = my_gpg3.init_servo('SERVO1')
+servo_pos = 90
+gpg_servo.rotate_servo(servo_pos)
 
 def forward():
     my_gpg3.forward()
@@ -46,30 +50,38 @@ def program2():
 def program3():
     pass
 
-def task2():
-    pass
-
-def task3():
-    pass
-
-def task4():
-    pass
-
-def task5():
-    pass
-
-def task6():
-    pass
-
 def sliders(values):
     my_gpg3.set_motor_power(1, values[0])#left
     my_gpg3.set_motor_power(2, values[1])#right
+
+def measure():
+    return my_distance_sensor.read_mm()
+
+def rotateservo(a,current_pos):
+    if a == "h":
+        current_pos = 90
+    elif a == "l":
+        current_pos=current_pos-10# If input is 'l' move the servo left 10 degrees.
+    elif a=='r':
+        current_pos=current_pos+10# If the input is 'r' move the servo right by 10 degrees.
+    else:
+        pass
+    #Get the servo angles back to the normal 0 to 180 degree range
+    if current_pos>180:
+        current_pos=180
+    if current_pos<0:
+        current_pos=0
+
+    gpg_servo.rotate_servo(current_pos)# This function updates the servo with the latest positon.  Move the servo.
+    return current_pos
+
+    
 
 if __name__=="__main__":
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind((HOST, PORT))
         s.listen()
-        while True: #Add timeout to this infinite loop
+        while True:
             conn, addr = s.accept() 
             with conn:
                 print('Connected by', addr)
@@ -78,7 +90,7 @@ if __name__=="__main__":
                     data = repr(rawdata)
                     datarefined = data[2:len(data)-1:]
                     print("Received",datarefined)
-                    if not rawdata: #fix this so it isn't so brute force
+                    if not rawdata:
                         break
                     if datarefined == "w":
                         conn.sendall(bytes("Forward", 'utf-8'))
@@ -133,24 +145,17 @@ if __name__=="__main__":
                             motors.append(int(motor))
                             
                             sliders(motors)
-                            print("Setting Left Motor to "+str(motors[0])+" and Right Motor to "+str(motors[1]))
+                            #print("Setting Left Motor to "+str(motors[0])+" and Right Motor to "+str(motors[1]))
                             m = "Setting Left Motor to "+str(motors[0])+" and Right Motor to "+str(motors[1])
                             conn.sendall(bytes(m, 'utf-8'))
                         except:
                             print("Error")
-                    elif datarefined[0:4:] == "task":
-                        if datarefined[4] == "2":
-                            task2()
-                        elif datarefined[4] == "3":
-                            task3()
-                        elif datarefined[4] == "4":
-                            task4()
-                        elif datarefined[4] == "5":
-                            task5()
-                        elif datarefined[4] == "6":
-                            task6()
-                        
-                        m = "Executing Task "+str(datarefined[4])
+                    elif datarefined[0:5:] == "servo":
+                        servo_pos = rotateservo(datarefined[5],servo_pos)
+                        m = "Rotating Servo"
+                        conn.sendall(bytes(m, 'utf-8'))
+                    elif datarefined == "measure":
+                        m = "sensor"+str(measure())
                         print(m)
                         conn.sendall(bytes(m, 'utf-8'))
                     else:
