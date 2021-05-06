@@ -1,35 +1,47 @@
-import kivy
-from kivy.uix.gridlayout import GridLayout
-from kivy.app import App
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.widget import Widget
-from kivy.uix.button import Button
+import pygame as pg
+import sys
+from pygame.locals import *
+import numpy as np
 
-class MyGrid(GridLayout):
-	def __init__(self, **kwargs):
-		super(MyGrid, self).__init__(**kwargs)
+height = 1000
+width = 600
 
-		self.inside = GridLayout()
-		self.inside.cols = 2
-		self.inside.rows = 2
-		self.inside.add_widget(Label(text=""))
-		self.inside.add_widget(Label(text=""))
-
-
-		self.cols = 2
-		self.add_widget(self.inside)
-		self.add_widget (Button(text="Submit"))
-
-class PaintWindow(Widget):
-	pass
-
-class PaintApp(App):
-	def build(self):
-		return MyGrid()
+pg.init()
 
 
 
 if __name__=="__main__":
-	#n = int(input("Tell me precission: \n"))
-	PaintApp().run()
+	n = int(input("Tell  me precission (5-50): "))
+	while n < 5 or n > 50:
+		n = int(input("Tell  me precission (5-50): "))
+	if n > 5 and n < 50:
+		robot = pg.image.load("robot.png")
+
+
+
+		screen = pg.display.set_mode((height, width))
+		pg.display.set_caption("Movement")
+		pg.display.set_icon(robot)
+
+
+		screen.fill(pg.Color("black"))
+
+		pg.display.update()
+		clock = pg.time.Clock()
+
+		i = 0
+		running = True
+		while running == True:
+			clock.tick(60) 
+			for event in pg.event.get(): 
+				if event.type == pg.QUIT: sys.exit()
+				elif event.type == MOUSEBUTTONDOWN or event.type == MOUSEBUTTONUP:
+					#running = False
+
+					#x, y = 128, 128
+					robot = pg.transform.scale(robot, (128, 128))
+					screen.blit(robot, (64, 64))
+					pg.display.update()
+				pg.display.update()
+			pg.display.update()
+		pg.display.update()

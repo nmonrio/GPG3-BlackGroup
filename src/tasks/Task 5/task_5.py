@@ -57,13 +57,19 @@ def execute_command(command):
     return
 
 if __name__=="__main__":
-    f = open('HOLIII.txt')
+    f = open('HOLIII.txt', "w")
     lines = f.readlines()
+    f.close()
     commands = []
     for i in range(len(lines)-1):
         commands.append(((lines[i])[:len(lines[i])-1:]).upper())
     commands.append("STOP")
-    print(commands)
+    #print(commands)
+    print("Specify the time parameters: ")
+    t_direction = int(input("Time moving in the direction given (once is set to that direction): "))
+    t_speed = int(input("Time moving when set new speed (the setting is inmediate): "))
+
+
     is_all_valid = True
     for command in commands:
         structured_command = parse_command(command)
@@ -73,5 +79,11 @@ if __name__=="__main__":
         for command in commands:
             print(command)
             execute_command(command)
-            time.sleep(5)
+            structured_command = parse_command(command)
+            if structured_command['NAME'] == "SET":
+                time.sleep(t_speed/1000)
+            if structured_command['NAME'] == "MV":
+                time.sleep(t_direction/1000)
+
+
         
