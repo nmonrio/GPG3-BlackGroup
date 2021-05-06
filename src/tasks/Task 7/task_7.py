@@ -3,9 +3,9 @@ import sys
 import math
 from pygame.locals import *
 import time
-import easygopigo3 as easy
+import easygopigo
 
-gpg = easy.EasyGoPiGo3()
+
 
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
@@ -57,11 +57,17 @@ def drawGrid():
 def hola(x, y):
     celda = 400//n
     position_x = x//celda+1
+    p = 1
     i = 1
+    for vector in range(n):
+        for m in range(n):
+            if grid[vector][m] == p:
+                p += 1
+    i = p
     position_y = y//celda+1
     print(position_x)
     print(position_y)
-    grid[position_x-1][position_y-1] = i
+    grid[position_x-1][position_y-1] = p
 
 def clicar():
     # while event.type != MOUSEBUTTONUP:
@@ -73,26 +79,29 @@ def submit():
     print(grid)
     running = False
     pygame.quit()
-    sys.quit()
+    sys.exit()
 
 
 def movement():
-    for i in range(n):
-        for j in range(n):
-            if grid[i][j] != 0:
-                vector = (i, j)
-                initial = (0, 0)
-                x_diff = i
-                y_diff = j
-                gpg.rotate(math.arctan(i/y))
-                gpg.set_speed(50)
-                t0 = time.time()
-                t_diff= 0
-                gpg.forward()
-                T = (i**2+j**2)**0.5/50
-                while t_diff < T:
-                    t_diff = t0-time.time()
-                gpg.stop()                
+    k = 1
+    while True:
+        for i in range(n):
+            for j in range(n):
+                if grid[i][j] == k:
+                    vector = (i, j)
+                    initial = (0, 0)
+                    x_diff = i
+                    y_diff = j
+                    gpg.rotate(math.arctan(j/i)*180/math.pi)
+                    gpg.set_speed(50)
+                    t0 = time.time()
+                    t_diff= 0
+                    gpg.forward()
+                    T = (i**2+j**2)**0.5/50
+                    while t_diff < T:
+                        t_diff = t0-time.time()
+                    gpg.stop()     
+        k += 1           
 
 if __name__=="__main__":
     n = int(input("Tell me precission (5-50): "))
