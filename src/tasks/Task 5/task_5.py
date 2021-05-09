@@ -66,8 +66,8 @@ if __name__=="__main__":
     commands.append("STOP")
     #print(commands)
     print("Specify the time parameters: ")
-    t_direction = int(input("Time moving in the direction given (once is set to that direction): "))
-    t_speed = int(input("Time moving when set new speed (the setting is inmediate): "))
+    t_direction = int(input("Time moving in the direction given in ms (once is set to that direction): "))
+    t_speed = int(input("Time moving when set new speed in ms (the setting is inmediate): "))
 
 
     is_all_valid = True
