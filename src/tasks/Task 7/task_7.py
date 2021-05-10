@@ -44,7 +44,6 @@ def main():
                 if event.key == pygame.K_a:
                     submit()
                     pygame.display.update()
-                    movement()
         pygame.display.update()
 
 
@@ -78,6 +77,8 @@ def clicar():
 
 def submit():
     print(grid)
+    movement()
+    time.sleep(50)
     running = False
     pygame.quit()
     sys.exit()
@@ -85,17 +86,18 @@ def submit():
 
 def movement():
     k = 1
-    while True:
+    gpg.set_speed(50)
+    while k <= p:
         n = len(grid)
+        final = 
         for i in range(n):
             for j in range(n):
                 if grid[i][j] == k:
                     vector = (i, j)
                     initial = (0, 0)
-                    x_diff = i
-                    y_diff = j
-                    gpg.orbit(math.atan(i/j),0)
-                    gpg.set_speed(50)
+                    x_diff = (initial[0]-final[0])*100
+                    y_diff = (initial[1]-final[1])*100
+                    gpg.orbit(math.atan(x_diff/y_diff))
                     t0 = time.time()
                     t_diff= 0
                     gpg.forward()
