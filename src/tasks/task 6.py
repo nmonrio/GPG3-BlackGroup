@@ -21,7 +21,7 @@ def forward_until_obstacle():
 def destination_free(angle):
     gpg_servo.rotate_servo(angle)
     sleep(servo_delay)
-    return (my_distance_sensor.read_mm() >= 100)
+    return (my_distance_sensor.read_mm() >= 400)
 
 
 if __name__=="__main__":
@@ -32,10 +32,10 @@ if __name__=="__main__":
         gpg.set_speed(slow)
         if destination_free(180):
             gpg.orbit(90)
-        elif destination_free(0):
-            gpg.orbit(-90)
+        
+
         else:
-            gpg.orbit(180)
+            gpg.orbit(-90)
         gpg.set_speed(fast)
         gpg_servo.rotate_servo(90)
         sleep(servo_delay)
