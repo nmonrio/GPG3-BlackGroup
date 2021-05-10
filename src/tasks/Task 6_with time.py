@@ -42,9 +42,8 @@ if __name__=="__main__":
             start = time.time()
             I_may_be_wrong = True
             
-            
         else:
-            gpg.orbit(180)
+            gpg.orbit(-90)
             
         gpg.set_speed(fast)
         gpg_servo.rotate_servo(90)
