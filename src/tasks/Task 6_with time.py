@@ -29,6 +29,7 @@ I_may_be_wrong = False
 if __name__=="__main__":
     gpg_servo.rotate_servo(90)
     gpg.set_speed(fast)
+    end = False
     while not end:
         forward_until_obstacle()
         end = time.time()
