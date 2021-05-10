@@ -6,6 +6,9 @@ actions = []
 
 gpg_servo = gpg.init_servo("SERVO1")
 
+
+
+
 def parse_command(command):
     tokens = command.split()
     structured_command = {}
@@ -31,29 +34,10 @@ def is_valid_command(command):
     return is_valid
 
 
-def execute_command(command):
-    if structured_command["NAME"] == "SET":
-        i = int(structured_command["PARAMETERS"][1])
-        gpg.set_speed(i)
-    if structured_command["NAME"] == "STOP":
-        gpg.stop()
-    if structured_command["NAME"] == "MV":
-        #actions.append("MV"+str(structured_command["PARAMETERS"]))
-        if structured_command["PARAMETERS"][0].upper() == "R":
-            gpg.turn_degrees(90)
-            gpg.forward()
-        if structured_command["PARAMETERS"][0].upper() == "L":
-            gpg.turn_degrees(-90)
-            gpg.forward()
-        if structured_command["PARAMETERS"][0].upper() == "F":
-            gpg.forward()
-        if structured_command["PARAMETERS"][0].upper() == "B":
-            gpg.turn_degrees(180)
-            gpg.forward()
+def append_command(command):
+    actions_file = open("actions.txt", a)
+    actions_file.append(command)
 
-    actions.append(structured_command)
-    
-    return
 
 if __name__=="__main__":
     gpg_servo.rotate_servo(90)
@@ -69,22 +53,22 @@ if __name__=="__main__":
     structured_command = parse_command(command)
     is_valid = is_valid_command(structured_command)
     if is_valid == True:
-        execute_command(command)
+        append_command(command)
     while structured_command["NAME"] != "STOP":
         command = input("Introduce command: ").upper()
         structured_command = parse_command(command)
         is_valid = is_valid_command(structured_command)
         if is_valid == True:
-            execute_command(command)
+            append_command(command)
         time.sleep(time_/1000)
             
     if structured_command["NAME"] == "STOP":
-        print("The actions you have done are: ")
+        print("The actions you have appended are: ")
         #print(actions)
         for i in actions:
             if i['NAME'] == "MV":
-                print("The robot has moved in direction: "+str(i["PARAMETERS"][0]))
+                print("The robot has set to move in direction: "+str(i["PARAMETERS"][0]))
             if i['NAME'] == "SET":
                 print("The velocity was set to: "+str(i["PARAMETERS"][1]))
             if i['NAME'] == "STOP":
-                print("The robot was stopped.")
+                print("The robot was programmed to stopped.")
