@@ -24,7 +24,7 @@ def destination_free(angle):
     gpg_servo.rotate_servo(angle)
     sleep(servo_delay)
     return (my_distance_sensor.read_mm() >= 100)
-
+start = time.time()
 I_may_be_wrong = False
 if __name__=="__main__":
     gpg_servo.rotate_servo(90)
