@@ -87,16 +87,17 @@ def submit():
 def movement():
     k = 1
     gpg.set_speed(50)
+    initial = (0,0)
     while k <= p:
         n = len(grid)
-        final = 
+        initial = final
+        final = (0, 0)
         for i in range(n):
             for j in range(n):
                 if grid[i][j] == k:
-                    vector = (i, j)
-                    initial = (0, 0)
-                    x_diff = (initial[0]-final[0])*100
-                    y_diff = (initial[1]-final[1])*100
+                    final = (i, j)
+                    x_diff = -(initial[0]-final[0])*100
+                    y_diff = -(initial[1]-final[1])*100
                     gpg.orbit(math.atan(x_diff/y_diff))
                     t0 = time.time()
                     t_diff= 0

@@ -30,12 +30,15 @@ def is_valid_command(command):
     if structured_command["NAME"] == "MV":
         is_valid = structured_command["PARAMETERS"][0].upper() == "R" or structured_command["PARAMETERS"][0].upper() == "L" or structured_command["PARAMETERS"][0].upper() == "B" or structured_command["PARAMETERS"][0].upper() == "F"
     if structured_command["NAME"] == "STOP":
-        is_valid = True
+        if len(structured_command["PARAMETERS"]) != 0:
+            is_valid = False
+        else:
+         is_valid = True
     return is_valid
 
 
 def append_command(command):
-    actions_file = open("actions.txt", a)
+    actions_file = open("actions.txt", 'a')
     actions_file.append(command)
 
 
@@ -54,15 +57,16 @@ if __name__=="__main__":
     is_valid = is_valid_command(structured_command)
     if is_valid == True:
         append_command(command)
-    while structured_command["NAME"] != "STOP":
+    while structured_command["NAME"] != "STOP" or structured_command["NAME"] == "STOP" and is_valid == False:
         command = input("Introduce command: ").upper()
         structured_command = parse_command(command)
         is_valid = is_valid_command(structured_command)
         if is_valid == True:
             append_command(command)
+        if is_valid == False:
         time.sleep(time_/1000)
             
-    if structured_command["NAME"] == "STOP":
+    if structured_command["NAME"] == "STOP" and is_valid == True:
         print("The actions you have appended are: ")
         #print(actions)
         for i in actions:

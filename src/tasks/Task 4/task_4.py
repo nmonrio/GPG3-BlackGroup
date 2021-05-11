@@ -11,23 +11,34 @@ def parse_command(command):
     structured_command = {}
     name = tokens[0].upper()
     parameters = tokens[1::]
-    structured_command["NAME"] = name
+    structured_command["NAME"] = name.upper()
     structured_command["PARAMETERS"] = parameters
     return structured_command
 
 def is_valid_command(command):
     is_valid = False
+    if structured_command["NAME"] != "SET" and structured_command["NAME"] != "STOP "and structured_command["NAME"] != "MV":
+            is_valid = False
     if structured_command["NAME"] == "SET":
-        is_valid = len(structured_command["PARAMETERS"]) == 2
-        is_valid = is_valid and structured_command["PARAMETERS"][0].upper() == "SPEED"
-        is_valid = is_valid and structured_command["PARAMETERS"][1].isnumeric()
-        is_valid = is_valid and int(structured_command["PARAMETERS"][1]) < 255
-        is_valid = is_valid and int(structured_command["PARAMETERS"][1]) > 0
+        if len(structured_command["PARAMETERS"]) != 2:
+            is_valid = False
+        else:
+            is_valid = len(structured_command["PARAMETERS"]) == 2
+            is_valid = is_valid and structured_command["PARAMETERS"][0].upper() == "SPEED"
+            is_valid = is_valid and structured_command["PARAMETERS"][1].isnumeric()
+            is_valid = is_valid and int(structured_command["PARAMETERS"][1]) < 255
+            is_valid = is_valid and int(structured_command["PARAMETERS"][1]) > 0
     
     if structured_command["NAME"] == "MV":
-        is_valid = structured_command["PARAMETERS"][0].upper() == "R" or structured_command["PARAMETERS"][0].upper() == "L" or structured_command["PARAMETERS"][0].upper() == "B" or structured_command["PARAMETERS"][0].upper() == "F"
+        if len(structured_command["PARAMETERS"]) != 1:
+            is_valid = False
+        else:
+            is_valid = structured_command["PARAMETERS"][0].upper() == "R" or structured_command["PARAMETERS"][0].upper() == "L" or structured_command["PARAMETERS"][0].upper() == "B" or structured_command["PARAMETERS"][0].upper() == "F"
     if structured_command["NAME"] == "STOP":
-        is_valid = True
+        if len(structured_command["PARAMETERS"]) != 0:
+            is_valid = False
+        else:
+         is_valid = True
     return is_valid
 
 
@@ -70,15 +81,19 @@ if __name__=="__main__":
     is_valid = is_valid_command(structured_command)
     if is_valid == True:
         execute_command(command)
-    while structured_command["NAME"] != "STOP":
+    if is_valid == False:
+        print("Not valid")
+    while structured_command["NAME"] != "STOP" or structured_command["NAME"] == "STOP" and is_valid == False:
         command = input("Introduce command: ").upper()
         structured_command = parse_command(command)
         is_valid = is_valid_command(structured_command)
         if is_valid == True:
             execute_command(command)
+        if is_valid == False:
+            print("Not valid")
         time.sleep(time_/1000)
             
-    if structured_command["NAME"] == "STOP":
+    if structured_command["NAME"] == "STOP" and is_valid == True:
         print("The actions you have done are: ")
         #print(actions)
         for i in actions:
