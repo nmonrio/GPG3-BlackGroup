@@ -65,7 +65,7 @@ def hola(x, y):
     print(position_y)
     grid[position_y-1][position_x-1] = i
     number.append(0)
-    
+
 def clicar():
     # while event.type != MOUSEBUTTONUP:
     a = pygame.mouse.get_pos()[0]
@@ -109,8 +109,8 @@ def movement(grid):
                         elif y_diff < 0: angle = 180
                     elif x_diff > 0 and y_diff > 0: angle = math.atan(x_diff/y_diff)*180/3.1415
                     elif x_diff > 0 and y_diff < 0: angle = 180-math.atan(x_diff/y_diff)*180/3.1415
-                    elif x_diff < 0 and y_diff > 0: -math.atan(x_diff/y_diff)*180/3.1415
-                    elif x_diff < 0 and y_diff < 0: -180+math.atan(x_diff/y_diff)*180/3.1415
+                    elif x_diff < 0 and y_diff > 0: angle = -math.atan(x_diff/y_diff)*180/3.1415
+                    elif x_diff < 0 and y_diff < 0: angle = -180+math.atan(x_diff/y_diff)*180/3.1415
                     print(round(angle,3))
                     print(distance)
                     #gpg.orbit(angle,0)
