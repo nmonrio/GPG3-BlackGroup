@@ -108,9 +108,9 @@ def movement(grid):
                         if y_diff > 0: angle = 0
                         elif y_diff < 0: angle = 180
                     elif x_diff > 0 and y_diff > 0: angle = math.atan(x_diff/y_diff)*180/3.1415
-                    elif x_diff > 0 and y_diff < 0: angle = 180-math.atan(x_diff/y_diff)*180/3.1415
-                    elif x_diff < 0 and y_diff > 0: angle = -math.atan(x_diff/y_diff)*180/3.1415
-                    elif x_diff < 0 and y_diff < 0: angle = -180+math.atan(x_diff/y_diff)*180/3.1415
+                    elif x_diff > 0 and y_diff < 0: angle = 90+math.atan(x_diff/y_diff)*180/3.1415
+                    elif x_diff < 0 and y_diff > 0: angle = 90-math.atan(x_diff/y_diff)*180/3.1415
+                    elif x_diff < 0 and y_diff < 0: angle = -90-math.atan(x_diff/y_diff)*180/3.1415
                     print(round(angle,3))
                     print(distance)
                     #gpg.orbit(angle,0)
