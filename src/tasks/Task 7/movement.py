@@ -20,7 +20,7 @@ def movement(grid):
         for i in range(n):
             for j in range(n):
                 if grid[i][j] == k:
-                    final = [i, j]
+                    final = [i-1, j-1]
                     x_diff = (final[0]-initial[0])*100
                     y_diff = (final[1]-initial[1])*100
                     print("y_diff:",y_diff)

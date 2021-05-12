@@ -101,21 +101,24 @@ def movement(grid):
                     y_diff = (final[1]-initial[1])*100
                     print("y_diff:",y_diff)
                     print("x_diff:",x_diff)
+                    distance = (x_diff**2+y_diff**2)**0.5
                     if y_diff == 0: 
                         if x_diff < 0:
-                            angle = -3.141592/2*180/3.1415
+                            angle = -90
                         elif x_diff > 0:
-                            angle = 3.141592/2*180/3.1415
+                            angle = 90
                     else: angle = math.atan(x_diff/y_diff)*180/3.1415
                     print(round(angle,3))
-                    gpg.rotate(angle)
-                    wait_seconds(2)
-                    gpg.forward()
-                    wait_seconds((i**2+j**2)**0.5/50*factor)
+                    gpg.orbit(angle,0)
+                    #wait_seconds(2)
+                    gpg.drive_cm(distance)
+                    #gpg.forward()
+                    #wait_seconds((i**2+j**2)**0.5/50*factor)
                     gpg.stop()
-                    gpg.rotate(-angle)
+                    gpg.orbit(-angle,0)
                     print(-angle)
-                    wait_seconds(5)
+                    time.sleep(3)
+                    #wait_seconds(5)
         k += 1
 
 
