@@ -8,11 +8,12 @@ Created on Tue May  4 17:04:27 2021
 
 import easygopigo3 as easy
 import numpy as np
+import time 
 
 gpg = easy.EasyGoPiGo3()
 gpg_servo = gpg.init_servo('SERVO1')
 
-my_distance_sensor = gpg.init_distance_sensor('AD2')
+my_distance_sensor = gpg.init_distance_sensor('AD1')
 
 n=int(input("Enter the number of scans required--->"))
 while n<4:
@@ -23,8 +24,14 @@ dist=int(input("Enter the minimum distance at which the obstacle is detected (be
 while dist<10:
     print("Not valid entry")
     dist=int(input("Enter the minimum distance at which the obstacle is detected (between 10/20 cm)--->"))
+
+r=int(input("Enter the radius of obstacle (cm)--->"))
+while r<1:
+    print("Minimum value admitted is 1")
+    r=int(input("Enter the radius of obstacle--->"))
     
 dgr = 360/n
+t_sleep=1
 end = False
 
 def forward_until_obstacle():
@@ -38,32 +45,47 @@ def destination_free():
     return condition
  
 def surround():
-    i=1
-    while i<21 and destination_free():
-        gpg.orbit(-dgr/20, dist+5)
-        gpg_servo.rotate_servo(90+i*90/20)
-        i+=1
+    gpg.orbit(-dgr, dist+r)
     gpg_servo.rotate_servo(0) #izquierda mirando objeto
-    
+    time.sleep(t_sleep)
+
+def lateral_space(a):
+    gpg_servo.rotate_servo(a)
+    time.sleep(t_sleep)
+    free = my_distance_sensor.read_mm() > (dist+r+10)*10
+    return free
+
+def front_space():
+    gpg.turn_degrees(-90) #mira izquierda
+    gpg.drive_cm(r+5)
+    gpg_servo.rotate_servo(180) #mira a su derecha
+    time.sleep(t_sleep)
+    free = my_distance_sensor.read_mm() > (dist+r+10)*20
+    gpg.turn_degrees(180) #mira derecha
+    gpg.drive_cm(r+5) #return to circular path
+    return free
 
 def identify_obstacle():
+    gpg_servo.rotate_servo(90)
     scans = 0
     verify=True
-    gpg.turn_degrees(90) #circular path
     while destination_free() and scans < n and verify:
         surround()
         if (my_distance_sensor.read_mm() <= dist*10):
             scans += 1
         else:
             verify=False
+        gpg_servo.rotate_servo(90)
     return scans == n
 
 if __name__ == "__main__":
+    gpg_servo.rotate_servo(90)
     while not end:
         forward_until_obstacle()
-        if identify_obstacle():
+        if lateral_space(0) and lateral_space(180) and front_space() and identify_obstacle():
             print("Sentinel Identified Object")
             end = True
         else:
-            gpg.turn_degrees(100)
+            gpg.turn_degrees(180)
             gpg_servo.rotate_servo(90)
+            time.sleep(t_sleep)
