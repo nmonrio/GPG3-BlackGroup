@@ -10,7 +10,6 @@ gpg = easy.EasyGoPiGo3()
 my_distance_sensor = gpg.init_distance_sensor('AD2')
 gpg_servo = gpg.init_servo('SERVO1')
 
-slow = 255
 fast = 255
 
 def forward_until_obstacle():
@@ -24,8 +23,10 @@ def destination_free(angle):
     gpg_servo.rotate_servo(angle)
     sleep(servo_delay)
     return (my_distance_sensor.read_mm() >= 100)
+
 start = time.time()
 I_may_be_wrong = False
+
 if __name__=="__main__":
     gpg_servo.rotate_servo(90)
     gpg.set_speed(fast)
