@@ -33,13 +33,13 @@ def is_valid_command(command):
         if len(structured_command["PARAMETERS"]) != 0:
             is_valid = False
         else:
-         is_valid = True
+            is_valid = True
     return is_valid
 
 
 def append_command(command):
     actions_file = open("actions.txt", 'a')
-    actions_file.append(command)
+    actions_file.write(command+"\n")
 
 
 if __name__=="__main__":
@@ -64,7 +64,7 @@ if __name__=="__main__":
         if is_valid == True:
             append_command(command)
         if is_valid == False:
-        time.sleep(time_/1000)
+            time.sleep(time_/1000)
             
     if structured_command["NAME"] == "STOP" and is_valid == True:
         print("The actions you have appended are: ")

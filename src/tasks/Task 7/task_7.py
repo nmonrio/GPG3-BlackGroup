@@ -78,35 +78,67 @@ def clicar():
 def submit():
     print(grid)
     movement()
-    time.sleep(50)
+    time.sleep(10)
     running = False
     pygame.quit()
     sys.exit()
 
 
-def movement():
+def movement(grid):
     k = 1
-    gpg.set_speed(50)
-    initial = (0,0)
-    while k <= p:
+    gpg.set_speed(255)
+    initial = [0,0]
+    final = [0, 0]
+    while True:
         n = len(grid)
         initial = final
-        final = (0, 0)
+        angle = 0
         for i in range(n):
             for j in range(n):
                 if grid[i][j] == k:
-                    final = (i, j)
-                    x_diff = -(initial[0]-final[0])*100
-                    y_diff = -(initial[1]-final[1])*100
-                    gpg.orbit(math.atan(x_diff/y_diff))
-                    t0 = time.time()
-                    t_diff= 0
+                    final = [j, i]
+                    x_diff = (final[0]-initial[0])*100
+                    y_diff = (final[1]-initial[1])*100
+                    print("y_diff:",y_diff)
+                    print("x_diff:",x_diff)
+                    if y_diff == 0: 
+                        if x_diff < 0:
+                            angle = -3.141592/2*180/3.1415
+                        elif x_diff > 0:
+                            angle = 3.141592/2*180/3.1415
+                    else: angle = math.atan(x_diff/y_diff)*180/3.1415
+                    print(round(angle,3))
+                    gpg.rotate(angle)
+                    wait_seconds(2)
                     gpg.forward()
-                    T = (i**2+j**2)**0.5/50
-                    while t_diff < T:
-                        t_diff = t0-time.time()
-                    gpg.stop()    
-        k += 1           
+                    wait_seconds((i**2+j**2)**0.5/50*factor)
+                    gpg.stop()
+                    gpg.rotate(-angle)
+                    print(-angle)
+                    wait_seconds(5)
+        k += 1
+
+
+def wait_seconds(my_time):
+    t0 = time.time()
+    t_diff= 0
+    while t_diff < my_time:
+        t_diff = time.time()-t0
+        gpg.forward()
+        print(round(t_diff,5), end = "\r")
+    print("Waited",t_diff,"seconds")
+
+def string_to_list(string_list):
+    l = string_list.split("[")
+    l = [ [i.strip("],")] for i in l if i]
+    for j in range(len(l)):
+        l[j] = l[j][0].split(",")
+        for k in range(len(l[j])):
+            try:
+                l[j][k] = int(l[j][k].strip("], "))
+            except:
+                l[j].remove(l[j][k])
+    return l
 
 if __name__=="__main__":
     n = int(input("Tell me precission (5-50): "))

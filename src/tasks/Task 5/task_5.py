@@ -57,14 +57,14 @@ def execute_command(command):
     return
 
 if __name__=="__main__":
-    f = open('HOLIII.txt', "w")
+    f = open('HOLIII.txt', "r")
     lines = f.readlines()
-    f.close()
     commands = []
     for i in range(len(lines)-1):
         commands.append(((lines[i])[:len(lines[i])-1:]).upper())
     commands.append("STOP")
     #print(commands)
+    f.close()
     print("Specify the time parameters: ")
     t_direction = int(input("Time moving in the direction given in ms (once is set to that direction): "))
     t_speed = int(input("Time moving when set new speed in ms (the setting is inmediate): "))
@@ -84,6 +84,12 @@ if __name__=="__main__":
                 time.sleep(t_speed/1000)
             if structured_command['NAME'] == "MV":
                 time.sleep(t_direction/1000)
+    else:
+        print("One of the actions specified can not be done. Check all the expression, here are the things that can be written (each of each line): ")
+        print("For moving: MV and the direction (L, R, F, B)")
+        print("For setting the speed: SET SPEED")
+        print("For stopping the motion: STOP")
+        print("Take into account that once stopped, you can done anything else.")
 
 
         
