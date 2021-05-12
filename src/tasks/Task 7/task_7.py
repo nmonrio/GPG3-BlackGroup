@@ -64,10 +64,10 @@ def hola(x, y):
             if grid[vector][m] == p:
                 p += 1
     i = p
-    position_y = y//celda+1
+    position_y = n-y//celda
     print(position_x)
     print(position_y)
-    grid[position_x-1][position_y-1] = p
+    grid[position_y-1][position_x-1] = p
 
 def clicar():
     # while event.type != MOUSEBUTTONUP:
