@@ -56,17 +56,18 @@ def lateral_space(a):
     return free
 
 def front_space():
-    gpg.turn_degrees(-90) #mira izquierda
-    gpg.drive_cm(r+5)
+    gpg.turn_degrees(-90) #virar izquierda
+    gpg.drive_cm(r+5) #mirar si hay pared al fondo
     gpg_servo.rotate_servo(180) #mira a su derecha
     time.sleep(t_sleep)
     free = my_distance_sensor.read_mm() > (dist+r+10)*20
-    gpg.turn_degrees(180) #mira derecha
-    gpg.drive_cm(r+5) #return to circular path
     return free
 
 def identify_obstacle():
+    gpg.turn_degrees(180) #virar derecha
+    gpg.drive_cm(r+5) #return to circular path starting point
     gpg_servo.rotate_servo(90)
+    time.sleep(t_sleep)
     scans = 0
     verify=True
     while destination_free() and scans < n and verify:
@@ -76,15 +77,21 @@ def identify_obstacle():
         else:
             verify=False
         gpg_servo.rotate_servo(90)
+        time.sleep(t_sleep)
     return scans == n
 
 if __name__ == "__main__":
     gpg_servo.rotate_servo(90)
     while not end:
         forward_until_obstacle()
-        if lateral_space(0) and lateral_space(180) and front_space() and identify_obstacle():
-            print("Sentinel Identified Object")
-            end = True
+        if lateral_space(0) and lateral_space(180):
+            if front_space() and identify_obstacle():
+                print("Sentinel Identified Object")
+                end = True
+            else:
+                gpg.turn_degrees(-90)
+                gpg_servo.rotate_servo(90)
+                time.sleep(t_sleep)
         else:
             gpg.turn_degrees(180)
             gpg_servo.rotate_servo(90)
