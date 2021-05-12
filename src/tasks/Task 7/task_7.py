@@ -54,10 +54,10 @@ def drawGrid():
             rect = pygame.Rect(x, y, blockSize, blockSize)
             pygame.draw.rect(SCREEN, WHITE, rect, 1)
 
+p = 1
 def hola(x, y):
     celda = 400//n
     position_x = x//celda+1
-    p = 1
     i = 1
     for vector in range(n):
         for m in range(n):
