@@ -58,17 +58,14 @@ p = 1
 def hola(x, y):
     celda = 400//n
     position_x = x//celda+1
-    i = 1
-    for vector in range(n):
-        for m in range(n):
-            if grid[vector][m] == p:
-                p += 1
-    i = p
+    i = len(number)
+    print(number)
     position_y = n-y//celda
     print(position_x)
     print(position_y)
-    grid[position_y-1][position_x-1] = p
-
+    grid[position_y-1][position_x-1] = i
+    number.append(0)
+    
 def clicar():
     # while event.type != MOUSEBUTTONUP:
     a = pygame.mouse.get_pos()[0]
@@ -86,7 +83,7 @@ def submit():
 
 def movement(grid):
     k = 1
-    gpg.set_speed(255)
+    #gpg.set_speed(255)
     initial = [0,0]
     final = [0, 0]
     while True:
@@ -110,16 +107,19 @@ def movement(grid):
                     elif x_diff == 0:
                         if y_diff > 0: angle = 0
                         elif y_diff < 0: angle = 180
-                    else: angle = math.atan(x_diff/y_diff)*180/3.1415
+                    elif x_diff > 0 and y_diff > 0: angle = math.atan(x_diff/y_diff)*180/3.1415
+                    elif x_diff > 0 and y_diff < 0: angle = 180-math.atan(x_diff/y_diff)*180/3.1415
+                    elif x_diff < 0 and y_diff > 0: -math.atan(x_diff/y_diff)*180/3.1415
+                    elif x_diff < 0 and y_diff < 0: -180+math.atan(x_diff/y_diff)*180/3.1415
                     print(round(angle,3))
                     print(distance)
-                    gpg.orbit(angle,0)
+                    #gpg.orbit(angle,0)
                     #wait_seconds(2)
-                    gpg.drive_cm(distance)
+                    #gpg.drive_cm(distance)
                     #gpg.forward()
                     #wait_seconds((i**2+j**2)**0.5/50*factor)
-                    gpg.stop()
-                    gpg.orbit(-angle,0)
+                    #gpg.stop()
+                    #gpg.orbit(-angle,0)
                     print(-angle)
                     time.sleep(3)
                     #wait_seconds(5)
@@ -148,6 +148,7 @@ def string_to_list(string_list):
     return l
 
 if __name__=="__main__":
+    number = [0]
     n = int(input("Tell me precission (5-50): "))
     while n > 50 or n < 5:
         n = int(input("Tell me precission (5-50): "))
