@@ -34,7 +34,7 @@ if __name__=="__main__":
     while not finished:
         forward_until_obstacle()
         end = time.time()
-        if end - start < 3 and I_may_be_wrong == True:
+        if end - start < 2 and I_may_be_wrong == True:
             gpg.orbit(180) # I was wrong
             I_may_be_wrong = False #Now I am not wrong
                      
