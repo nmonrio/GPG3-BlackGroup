@@ -3,12 +3,12 @@
 ## Table of contents
 1. [Introduction](#introduction)
 2. [App Screens](#app-screens)
-    1. [Main Screen](#home-screen)
+    1. [Home Screen](#home-screen)
     2. [Buttons Screen](#buttons-screen)
     5. [Sliders Screen](#sliders-screen)
     6. [Joystick Screen](#joystick-screen)
     7. [Sensor Servo Screen](#sensor-servo-screen)
-3. [Code](##code)
+3. [Code](#code)
 
 
 
