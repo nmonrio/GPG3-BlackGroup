@@ -57,11 +57,13 @@ def execute_command(command):
     return
 
 if __name__=="__main__":
-    f = open('HOLIII.txt', "r")
+    name = input("Tell me the file name (without the .txt): \n")
+    name += ".txt"
+    f = open(name, "r")
     lines = f.readlines()
     commands = []
     for i in range(len(lines)-1):
-        commands.append(((lines[i])[:len(lines[i])-1:]).upper())
+        commands.append((lines[i].strip()).upper())
     commands.append("STOP")
     #print(commands)
     f.close()
