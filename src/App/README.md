@@ -2,11 +2,13 @@
 
 ## Table of contents
 1. [Introduction](##introduction)
-2. [Main Screen](##Home-Screen)
-3. [Buttons Screen](##Buttons-Screen)
-4. [Sliders Screen](##Sliders-Screen)
-5. [Joystick Screen](##Joystick-Screen)
-6. [Sensor Servo Screen](##Sensor-Servo-Screen)
+2. [App Screens](##App-Screens)
+    1. [Main Screen](##Home-Screen)
+    2. [Buttons Screen](##Buttons-Screen)
+    5. [Sliders Screen](##Sliders-Screen)
+    6. [Joystick Screen](##Joystick-Screen)
+    7. [Sensor Servo Screen](##Sensor-Servo-Screen)
+3. [Code](##Code)
 
 
 
@@ -16,7 +18,8 @@
 
 The application has five main screens: a home screen and a screen for each of the functionalities. An overview of each screen is given in the following sections.
 
-## Home Screen
+## App Screens
+### Home Screen
 
 The home screen contains two sections: one which contains the elements necessary to make the connection with the robot and another which contains the links (buttons) to go to the other screens. All other screens also have a home button to return to the home screen.
 
@@ -32,19 +35,24 @@ The connection to the robot is done following these steps:
 
 A popup window will display whether the connection has been successful or not.
 
-## Buttons Screen
+### Buttons Screen
 
 This screen contains nine buttons to control the robot movement (forward, right, left, stop etc.). A tenth button provides the link to the home screen.
 
-## Sliders Screen
+### Sliders Screen
 
 This screen provides two sliders: one to control the speed of the right motor (right slider) and another to control the speed of the left motor (left slider). The values of the slider are shown on the labels that are directly below them. The home button is a link to the home screen.
 
-## Joystick Screen
+### Joystick Screen
 
 This screen provides a means to control the robot via a joystick, which is positioned in the center of the canvas. Above the joystick, we also have four labels. The top two labels show the *x* and *y* positions of the joystick pointer. The lower two labels show the power that is being sent to each of the motors. Again, the home button links to the home screen.
 
-## Sensor Servo Screen
+### Sensor Servo Screen
 
 This screen contains two useful functionalities: the control of the servo where the sensor is mounted, via the top three buttons (spin left, face forward, and spin right); and the measurement of distances by means of the distance sensor, which is done by clicking the *measure* button (the measurement is then displayed in the label right below the button). Again, there is also a home buton that links to the home screen.
 
+## Code
+
+The application is coded using a python library called *kivy*, as mentioned in the introduction. *kivy* apps are programmed in python, but in order to manage layouts, *kivy* also has its own file format (`.kv`). This allows the user to create more complex layouts much more easily. For example, in `.kv` files, we define the widgets and grids that we want to append to our screen, and instead of having to manually do this, we can simply establish the parent-child relations between objects and attributes by means of indentation. 
+
+In the *Raspberry Control Center* app, these `.kv` have been used to create the layouts for the screens. Therefore, the code for the app is divided into two different files: `main.py` and `main.kv`. The first is the main python file, and the second contains the layouts for the screens. It is important to note that, although the `.kv` file is not a regular python file, the code it contains *is* still python.
