@@ -2,11 +2,11 @@
 
 ## Table of contents
 1. [Introduction](##introduction)
-2. [Main Screen](##Home Screen)
-3. [Buttons Screen](##Buttons Screen)
-4. [Sliders Screen](##Sliders Screen)
-5. [Joystick Screen](##Joystick Screen)
-6. [Sensor Servo Screen](##Sensor Servo Screen)
+2. [Main Screen](##Home-Screen)
+3. [Buttons Screen](##Buttons-Screen)
+4. [Sliders Screen](##Sliders-Screen)
+5. [Joystick Screen](##Joystick-Screen)
+6. [Sensor Servo Screen](##Sensor-Servo-Screen)
 
 
 
